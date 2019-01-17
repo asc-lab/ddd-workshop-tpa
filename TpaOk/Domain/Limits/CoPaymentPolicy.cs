@@ -33,8 +33,8 @@ namespace TpaOk.Domain.Limits
 
     public class CoPaymentApplicationResult
     {
-        public Money NotCoveredAmount { get; private set; }
-        public bool CoPaymentApplied { get; private set; }
+        public Money NotCoveredAmount { get; }
+        public bool IsApplied { get; }
 
         public static CoPaymentApplicationResult NotApplied()
         {
@@ -49,7 +49,7 @@ namespace TpaOk.Domain.Limits
         private CoPaymentApplicationResult(bool applied, Money notCoveredAmount)
         {
             NotCoveredAmount = notCoveredAmount;
-            CoPaymentApplied = applied;
+            IsApplied = applied;
         }
     }
 }

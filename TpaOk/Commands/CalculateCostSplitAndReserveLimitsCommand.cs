@@ -45,7 +45,8 @@ namespace TpaOk.Commands
 
         public void Apply(CoPaymentApplicationResult coPaymentResult)
         {
-            if (InsuredCost!=TotalCost && coPaymentResult.NotCoveredAmount > Money.Euro(0))
+            // .NotCoveredAmount > Money.Euro(0)
+            if (InsuredCost != TotalCost && coPaymentResult.IsApplied)
             {
                 InsuredCost += coPaymentResult.NotCoveredAmount;
                 TuCost -= coPaymentResult.NotCoveredAmount;
