@@ -1,4 +1,4 @@
-package tparegistercase
+package pl.asc.tparegistercase
 
 import spock.lang.Specification
 
