@@ -4,17 +4,15 @@ namespace TpaOk.Domain.Limits
 {
     public class CoPaymentPolicy
     {
-        private readonly IPolicyRepository _policyRepository;
+        private readonly PolicyVersion policyAtServiceDate;
 
-        public CoPaymentPolicy(IPolicyRepository policyRepository)
+        public CoPaymentPolicy(PolicyVersion policyAtServiceDate)
         {
-            _policyRepository = policyRepository;
+            this.policyAtServiceDate = policyAtServiceDate;
         }
         
         public CoPaymentApplicationResult ApplyCoPayment(Case @case, CaseService caseService)
         {
-            var policyAtServiceDate = _policyRepository.GetVersionValidAt(@case.PolicyId, caseService.Date);
-
             if (policyAtServiceDate==null) //TODO: remove
             {
                 return new CoPaymentApplicationResult(Money.Euro(0));

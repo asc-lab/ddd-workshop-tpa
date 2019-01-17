@@ -17,9 +17,20 @@ namespace TpaOk.Domain.Limits
 
     public class CalculateCostSplitAndReserveLimitsResult
     {
-        public Money InsuredCost { get; set; }
-        public Money TuCost { get; set; }
-        public Money TotalCost { get; set; }
+        public Money InsuredCost { get; private set; }
+        public Money TuCost { get; private set; }
+        public Money TotalCost { get; private set; }
+
+        public static CalculateCostSplitAndReserveLimitsResult Initial(Case @case)
+        {
+            return new CalculateCostSplitAndReserveLimitsResult
+            {
+                InsuredCost = Money.Euro(0),
+                TuCost = @case.TotalCost,
+                TotalCost = @case.TotalCost
+            };
+        }
+        
 
         public void Apply(CoverageCheckResult serviceCoveredPolicyResult)
         {

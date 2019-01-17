@@ -13,18 +13,16 @@ namespace TpaOk.Domain.Limits
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
-            var costSplit = new CalculateCostSplitAndReserveLimitsResult
-            {
-                InsuredCost = Money.Euro(0),
-                TuCost = cmd.Case.TotalCost,
-                TotalCost = cmd.Case.TotalCost
-            };
+            var costSplit = CalculateCostSplitAndReserveLimitsResult.Initial(cmd.Case);
 
-            var serviceCoveredPolicy = new ServiceCoveredPolicy(_policyRepository);
-            var coPaymentPolicy = new CoPaymentPolicy(_policyRepository);
-            
             foreach (var caseService in cmd.Case.Services)
             {
+                var policyVersionAtServiceDate =
+                    _policyRepository.GetVersionValidAt(cmd.Case.PolicyId, caseService.Date);
+             
+                var serviceCoveredPolicy = new ServiceCoveredPolicy(policyVersionAtServiceDate);
+                var coPaymentPolicy = new CoPaymentPolicy(policyVersionAtServiceDate);
+                
                 var serviceCoveredPolicyResult = serviceCoveredPolicy.CheckIfServiceCovered(cmd.Case, caseService);
                 costSplit.Apply(serviceCoveredPolicyResult);
 

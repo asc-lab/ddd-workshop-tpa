@@ -4,33 +4,31 @@ namespace TpaOk.Domain.Limits
 {
     public class ServiceCoveredPolicy
     {
-        private readonly IPolicyRepository _policyRepository;
+        private readonly PolicyVersion policyAtServiceDate;
 
-        public ServiceCoveredPolicy(IPolicyRepository policyRepository)
+        public ServiceCoveredPolicy(PolicyVersion policyAtServiceDate)
         {
-            _policyRepository = policyRepository;
+            this.policyAtServiceDate = policyAtServiceDate;
         }
 
         public CoverageCheckResult CheckIfServiceCovered(Case @case, CaseService caseService)
         {
-            var policyAtServiceDate = _policyRepository.GetVersionValidAt(@case.PolicyId, caseService.Date);
-
             if (policyAtServiceDate == null)
             {
-                return new CoverageCheckResult(false, NotCoveredReason.NoPolicyAtServiceDate, caseService.Cost);
+                return CoverageCheckResult.NotCovered(NotCoveredReason.NoPolicyAtServiceDate, caseService);
             }
 
             if (!policyAtServiceDate.CoversInsured(@case.InsuredId))
             {
-                return new CoverageCheckResult(false, NotCoveredReason.InsuredNotFoundOnPolicy, caseService.Cost);
+                return CoverageCheckResult.NotCovered(NotCoveredReason.InsuredNotFoundOnPolicy, caseService);
             }
 
             if (!policyAtServiceDate.CoversService(caseService.ServiceCode))
             {
-                return new CoverageCheckResult(false, NotCoveredReason.ServiceNotFoundOnPolicy, caseService.Cost);
+                return CoverageCheckResult.NotCovered(NotCoveredReason.ServiceNotFoundOnPolicy, caseService);
             }
 
-            return new CoverageCheckResult(true, null, Money.Euro(0));
+            return CoverageCheckResult.FullyCovered();
         }
     }
 
@@ -40,7 +38,17 @@ namespace TpaOk.Domain.Limits
         public NotCoveredReason? NotCoveredReason { get; private set; }
         public Money NotCoveredAmount { get; private set; }
 
-        public CoverageCheckResult(bool isCovered, NotCoveredReason? notCoveredReason, Money notCoveredAmount)
+        public static CoverageCheckResult FullyCovered()
+        {
+            return new CoverageCheckResult(true, null, Money.Euro(0));
+        }
+
+        public static CoverageCheckResult NotCovered(NotCoveredReason notCoveredReason, CaseService caseService)
+        {
+            return new CoverageCheckResult(false, notCoveredReason, caseService.Cost);
+        }
+        
+        private CoverageCheckResult(bool isCovered, NotCoveredReason? notCoveredReason, Money notCoveredAmount)
         {
             IsCovered = isCovered;
             NotCoveredReason = notCoveredReason;
