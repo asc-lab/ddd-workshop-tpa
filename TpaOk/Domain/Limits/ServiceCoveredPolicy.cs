@@ -35,9 +35,9 @@ namespace TpaOk.Domain.Limits
 
     public class CoverageCheckResult
     {
-        public bool IsCovered { get; private set; }
-        public NotCoveredReason? NotCoveredReason { get; private set; }
-        public Money NotCoveredAmount { get; private set; }
+        public bool IsCovered { get; }
+        public NotCoveredReason? NotCoveredReason { get; }
+        public Money NotCoveredAmount { get; }
 
         public static CoverageCheckResult FullyCovered()
         {

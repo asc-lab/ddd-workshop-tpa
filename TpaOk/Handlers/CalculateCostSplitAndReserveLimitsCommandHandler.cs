@@ -42,8 +42,6 @@ namespace TpaOk.Commands
                 }
             }
 
-
-
             return costSplit;
         }
     }
