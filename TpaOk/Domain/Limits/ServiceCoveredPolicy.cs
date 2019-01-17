@@ -11,7 +11,7 @@ namespace TpaOk.Domain.Limits
             this.policyAtServiceDate = policyAtServiceDate;
         }
 
-        public CoverageCheckResult CheckIfServiceCovered(Case @case, CaseService caseService)
+        public CoverageCheckResult Apply(Case @case, CaseService caseService)
         {
             if (policyAtServiceDate == null)
             {

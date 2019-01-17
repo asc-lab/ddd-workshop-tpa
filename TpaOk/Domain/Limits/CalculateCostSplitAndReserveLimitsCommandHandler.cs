@@ -23,10 +23,10 @@ namespace TpaOk.Domain.Limits
                 var serviceCoveredPolicy = new ServiceCoveredPolicy(policyVersionAtServiceDate);
                 var coPaymentPolicy = new CoPaymentPolicy(policyVersionAtServiceDate);
                 
-                var serviceCoveredPolicyResult = serviceCoveredPolicy.CheckIfServiceCovered(cmd.Case, caseService);
+                var serviceCoveredPolicyResult = serviceCoveredPolicy.Apply(cmd.Case, caseService);
                 costSplit.Apply(serviceCoveredPolicyResult);
 
-                var coPaymentApplicationResult = coPaymentPolicy.ApplyCoPayment(cmd.Case, caseService);
+                var coPaymentApplicationResult = coPaymentPolicy.Apply(cmd.Case, caseService);
                 costSplit.Apply(coPaymentApplicationResult);
             }
 
