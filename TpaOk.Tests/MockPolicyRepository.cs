@@ -31,6 +31,10 @@ namespace TpaOk.Tests
             {
                 7,
                 AmountLimitPolicyWithConsumptions()
+            },
+            {
+                8,
+                AmountLimitAndCoPaymentPolicy()
             }
         };
 
@@ -138,6 +142,29 @@ namespace TpaOk.Tests
                 CoveredServices = new List<CoveredService>()
                 {
                     new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod())}
+                }
+            };
+        }
+        
+        private static PolicyVersion AmountLimitAndCoPaymentPolicy()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 8,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService
+                    {
+                        ServiceCode = "KONS_INTERNISTA", 
+                        CoPayment = new PercentCoPayment(0.1m), 
+                        Limit = new AmountLimit(500, new PolicyYearLimitPeriod())
+                    }
                 }
             };
         }
