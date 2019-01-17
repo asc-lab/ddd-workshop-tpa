@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddServiceCommand implements Command<AddServiceResult> {
+public class AddServiceInCaseCommand implements Command<AddServiceInCaseResult> {
     private String caseNumber;
     private String serviceCode;
-    private Long serviceQuantity;
+    private Integer serviceQuantity;
     private String facilityCode;
     private LocalDateTime visitDate;
 }

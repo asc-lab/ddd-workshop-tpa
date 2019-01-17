@@ -8,13 +8,12 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
-class ServiceInCase {
+class RejectedServiceInCase {
 
-    private Integer order;
     private String serviceCode;
     private Integer serviceQuantity;
     private String facilityCode;
     private LocalDateTime visitDate;
     private Monetary price;
-
+    private String rejectionReason;
 }

@@ -9,13 +9,13 @@ import pl.asc.tparegistercase.domain.vo.ServiceInCasePrice;
 import pl.asc.tparegistercase.specification.NotNullSpecification;
 
 @RequiredArgsConstructor
-public class AddServiceCommandHandler implements CommandHandler<AddServiceResult, AddServiceCommand> {
+public class AddServiceInCaseCommandHandler implements CommandHandler<AddServiceInCaseResult, AddServiceInCaseCommand> {
 
     private final CaseRepository caseRepository;
     private final MSPPriceService mspPriceService;
 
     @Override
-    public AddServiceResult handle(AddServiceCommand command) {
+    public AddServiceInCaseResult handle(AddServiceInCaseCommand command) {
         Case aCase = caseRepository.findByCaseNumber(command.getCaseNumber());
         ServiceInCasePrice serviceInCasePrice = mspPriceService
                 .findByFacilityAndService(command.getFacilityCode(), command.getServiceCode());
@@ -28,7 +28,8 @@ public class AddServiceCommandHandler implements CommandHandler<AddServiceResult
                 command.getVisitDate(),
                 serviceInCasePrice.getPrice()
         );
+        //todo cost report service
         caseRepository.save(aCase);
-        return new AddServiceResult();
+        return new AddServiceInCaseResult();
     }
 }

@@ -5,5 +5,5 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AddServiceResult {
+public class AddServiceInCaseResult {
 }
