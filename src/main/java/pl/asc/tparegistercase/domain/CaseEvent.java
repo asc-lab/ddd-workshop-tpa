@@ -6,4 +6,9 @@ abstract class CaseEvent {
 
     protected LocalDateTime eventTime;
 
+    CaseEvent() {
+        this.eventTime = LocalDateTime.now();
+    }
+
+
 }

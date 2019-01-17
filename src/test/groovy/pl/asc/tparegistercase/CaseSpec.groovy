@@ -8,14 +8,14 @@ import pl.asc.tparegistercase.command.addservice.AddServiceCommandHandler
 import pl.asc.tparegistercase.command.registercase.RegisterCaseCommand
 import pl.asc.tparegistercase.command.registercase.RegisterCaseCommandHandler
 import pl.asc.tparegistercase.command.registercase.RegisterCaseResult
-import pl.asc.tparegistercase.domain.CaseRepository
+import pl.asc.tparegistercase.infrastructure.CaseRepositoryTestImpl
 import spock.lang.Specification
 
 import java.time.LocalDateTime
 
 class CaseSpec extends Specification {
 
-    def repository = Mock(CaseRepository)
+    def repository = new CaseRepositoryTestImpl()
 
     def "should register case with 1 service"() {
 
@@ -38,7 +38,7 @@ class CaseSpec extends Specification {
                     visitDate: visitDate))
 
 
-            AcceptCaseResult acceptCaseResult = new AcceptCaseCommandHandler().handle(new AcceptCaseCommand(caseResult.caseNumber))
+            AcceptCaseResult acceptCaseResult = new AcceptCaseCommandHandler(repository).handle(new AcceptCaseCommand(caseResult.caseNumber))
         then:
             acceptCaseResult.success
     }
