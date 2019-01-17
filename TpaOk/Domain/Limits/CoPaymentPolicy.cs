@@ -15,27 +15,40 @@ namespace TpaOk.Domain.Limits
         {
             if (policyAtServiceDate==null) //TODO: remove
             {
-                return new CoPaymentApplicationResult(Money.Euro(0));
+                return CoPaymentApplicationResult.NotApplied();
             }
 
             var coPayment = policyAtServiceDate.CoPaymentFor(caseService.ServiceCode);
 
             if (coPayment == null)
             {
-                return new CoPaymentApplicationResult(Money.Euro(0));
+                return CoPaymentApplicationResult.NotApplied();
             }
 
-            return new CoPaymentApplicationResult(coPayment.Calculate(caseService));
+            var amount = coPayment.Calculate(caseService);
+            return CoPaymentApplicationResult.Applied(amount);
         }
     }
 
     public class CoPaymentApplicationResult
     {
         public Money NotCoveredAmount { get; private set; }
+        public bool CoPaymentApplied { get; private set; }
 
-        public CoPaymentApplicationResult(Money notCoveredAmount)
+        public static CoPaymentApplicationResult NotApplied()
+        {
+            return new CoPaymentApplicationResult(false, Money.Euro(0));
+        }
+
+        public static CoPaymentApplicationResult Applied(Money amount)
+        {
+            return new CoPaymentApplicationResult(true, amount);
+        }
+
+        private CoPaymentApplicationResult(bool applied, Money notCoveredAmount)
         {
             NotCoveredAmount = notCoveredAmount;
+            CoPaymentApplied = applied;
         }
     }
 }
