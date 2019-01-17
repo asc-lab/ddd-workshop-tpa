@@ -84,7 +84,7 @@ namespace TpaOk.Domain.Limits
     {
         public LimitPeriod LimitPeriod { get; }
         
-        public abstract LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit,
+        public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumption currentLimitConsumption);
         
 
@@ -105,7 +105,7 @@ namespace TpaOk.Domain.Limits
         {
         }
 
-        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit,
+        public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumption currentLimitConsumption)
         {
             
@@ -122,7 +122,7 @@ namespace TpaOk.Domain.Limits
             _amount = Money.Euro(amount);
         }
 
-        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit,
+        public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumption currentLimitConsumption)
         {
             var currentMax = _amount - currentLimitConsumption.ConsumedAmount;

@@ -28,13 +28,13 @@ namespace TpaOk.Domain.Limits
                 var limitPolicy = new LimitsPolicy(policyVersionAtServiceDate, _limitConsumptionsRepositoryRepository);
                 
                 var serviceCoveredPolicyResult = serviceCoveredPolicy.Apply(cmd.Case, caseService);
-                costSplit.Apply(serviceCoveredPolicyResult);
+                costSplit.Apply(caseService, serviceCoveredPolicyResult);
 
                 var coPaymentApplicationResult = coPaymentPolicy.Apply(cmd.Case, caseService);
-                costSplit.Apply(coPaymentApplicationResult);
+                costSplit.Apply(caseService, coPaymentApplicationResult);
 
                 var limitApplicationResult = limitPolicy.Apply(cmd.Case, caseService, costSplit);
-                costSplit.Apply(limitApplicationResult);
+                costSplit.Apply(caseService, limitApplicationResult);
                 if (limitApplicationResult.IsApplied)
                 {
                     _limitConsumptionsRepositoryRepository.Add(new Consumption(cmd.Case, caseService,
