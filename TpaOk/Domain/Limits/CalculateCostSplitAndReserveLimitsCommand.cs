@@ -20,6 +20,7 @@ namespace TpaOk.Domain.Limits
         public Money InsuredCost { get; private set; }
         public Money TuCost { get; private set; }
         public Money TotalCost { get; private set; }
+        public Money LimitConsumption { get; private set; }
 
         public static CalculateCostSplitAndReserveLimitsResult Initial(Case @case)
         {
@@ -27,7 +28,8 @@ namespace TpaOk.Domain.Limits
             {
                 InsuredCost = Money.Euro(0),
                 TuCost = @case.TotalCost,
-                TotalCost = @case.TotalCost
+                TotalCost = @case.TotalCost,
+                LimitConsumption = Money.Euro(0)
             };
         }
         
@@ -47,6 +49,16 @@ namespace TpaOk.Domain.Limits
             {
                 InsuredCost += coPaymentResult.NotCoveredAmount;
                 TuCost -= coPaymentResult.NotCoveredAmount;
+            }
+        }
+
+        public void Apply(LimitsApplicationResult limitsApplicationResult)
+        {
+            if (InsuredCost != TotalCost && limitsApplicationResult.IsApplied)
+            {
+                InsuredCost += limitsApplicationResult.NotCoveredAmount;
+                TuCost -= limitsApplicationResult.NotCoveredAmount;
+                LimitConsumption += limitsApplicationResult.LimitConsumption;
             }
         }
     }

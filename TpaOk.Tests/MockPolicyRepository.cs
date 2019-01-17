@@ -23,6 +23,10 @@ namespace TpaOk.Tests
             {
                 5,
                 OverCopayment110AmountPaymentNoLimitsPolicy()
+            },
+            {
+                6,
+                AmountLimitPolicy()
             }
         };
 
@@ -94,6 +98,24 @@ namespace TpaOk.Tests
                 CoveredServices = new List<CoveredService>()
                 {
                     new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = new AmountCoPayment(110m)}
+                }
+            };
+        }
+        
+        private static PolicyVersion AmountLimitPolicy()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 6,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500)}
                 }
             };
         }

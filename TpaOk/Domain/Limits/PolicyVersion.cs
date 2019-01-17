@@ -27,12 +27,18 @@ namespace TpaOk.Domain.Limits
         {
             return CoveredServices.FirstOrDefault(cs => cs.ServiceCode == serviceCode)?.CoPayment;
         }
+
+        public Limit LimitFor(string serviceCode)
+        {
+            return CoveredServices.FirstOrDefault(cs => cs.ServiceCode == serviceCode)?.Limit;
+        }
     }
 
     public class CoveredService
     {
         public string ServiceCode { get; set; }
         public CoPayment CoPayment { get; set; }
+        public Limit Limit { get; set; }
     }
 
     public class Insured
@@ -40,6 +46,55 @@ namespace TpaOk.Domain.Limits
         public int InsuredId { get; set; }
     }
     
+    public abstract class Limit
+    {
+        public abstract LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit);
+    }
+
+    public class QuantityLimit : Limit
+    {
+        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class AmountLimit : Limit
+    {
+        private Money _amount;
+
+        public AmountLimit(decimal amount)
+        {
+            _amount = Money.Euro(amount);
+        }
+
+        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit)
+        {
+            if (costSplit.TuCost > _amount)
+            {
+                return new LimitCalculation
+                {
+                    LimitConsumption = _amount,
+                    NotCoveredAmount = costSplit.TuCost - _amount
+                };
+            }
+            else
+            {
+                return new LimitCalculation
+                {
+                    LimitConsumption = costSplit.TuCost,
+                    NotCoveredAmount = Money.Euro(0)
+                };
+            }
+        }
+    }
+
+    public class LimitCalculation
+    {
+        public Money LimitConsumption { get; set; }
+        public Money NotCoveredAmount { get; set; }
+    }
+
     public abstract class CoPayment
     {
         public abstract Money Calculate(CaseService caseService);

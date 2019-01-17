@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TpaOk.Tests
 {
-    public class CostSplitAndLimitReservationTests
+    public class ServiceCoverageTests
     {   
         private CalculateCostSplitAndReserveLimitsCommandHandler cmdHandler =
             new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository());
