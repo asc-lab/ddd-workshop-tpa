@@ -30,7 +30,7 @@ class CaseSpec extends Specification {
         when:
             RegisterCaseResult caseResult = new RegisterCaseCommandHandler(repository).handle(registerCaseCommand)
 
-            new AddServiceCommandHandler().handle(new AddServiceCommand(
+            new AddServiceCommandHandler(repository).handle(new AddServiceCommand(
                     caseNumber: caseResult.getCaseNumber(),
                     serviceCode: 'INTERNISTA',
                     serviceQuantity: 1L,
