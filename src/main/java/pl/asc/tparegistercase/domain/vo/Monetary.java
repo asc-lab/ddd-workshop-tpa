@@ -20,4 +20,8 @@ public class Monetary {
     public static Monetary of(String currency, BigDecimal amount) {
         return new Monetary(currency, amount);
     }
+
+    public static Monetary of(Monetary price) {
+        return new Monetary(price.getCurrency(), price.getAmount());
+    }
 }

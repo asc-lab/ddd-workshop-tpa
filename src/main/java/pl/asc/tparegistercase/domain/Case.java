@@ -53,7 +53,7 @@ public class Case {
 
     public void rejectServiceInCase(Integer serviceOrderNumber, String rejectionReason) { //TODO what if there is nothing to reject?
         services.stream()
-                .filter(service -> service.getOrder().equals(serviceOrderNumber))
+                .filter( service -> service.getOrder().equals(serviceOrderNumber))
                 .findFirst()
                 .ifPresent(serviceInCase -> {
                     services.remove(serviceInCase);

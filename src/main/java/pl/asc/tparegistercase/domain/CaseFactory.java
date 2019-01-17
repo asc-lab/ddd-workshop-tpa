@@ -5,7 +5,6 @@ import pl.asc.tparegistercase.command.registercase.RegisterCaseCommand;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 @RequiredArgsConstructor
 public class CaseFactory {
@@ -14,9 +13,7 @@ public class CaseFactory {
     public Case create() {
         return new Case(
                 new CaseNumberGenerator().generate(),
-                new InsuredFactory(command).create(),
-                new ArrayList<>()
-
+                new InsuredFactory(command).create()
         );
     }
 
