@@ -10,6 +10,6 @@ import pl.asc.tparegistercase.cqs.Command;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AcceptCaseCommand implements Command<AcceptCaseResult> {
+public class EndRegistrationCaseCommand implements Command<EndRegistrationCommandResult> {
     private String caseNumber;
 }

@@ -4,18 +4,19 @@ import lombok.RequiredArgsConstructor;
 import pl.asc.tparegistercase.cqs.CommandHandler;
 import pl.asc.tparegistercase.domain.Case;
 import pl.asc.tparegistercase.domain.CaseRepository;
+import pl.asc.tparegistercase.specification.NotNullSpecification;
 
 @RequiredArgsConstructor
-public class AcceptCaseCommandHandler implements CommandHandler<AcceptCaseResult, AcceptCaseCommand> {
+public class EndRegistrationCaseHandler implements CommandHandler<EndRegistrationCommandResult, EndRegistrationCaseCommand> {
 
     private final CaseRepository caseRepository;
 
     @Override
-    public AcceptCaseResult handle(AcceptCaseCommand command) {
+    public EndRegistrationCommandResult handle(EndRegistrationCaseCommand command) {
         Case aCase = caseRepository.findByCaseNumber(command.getCaseNumber());
-        //todo exception when not found
+        new NotNullSpecification("case not null").ensureIsSatisfiedBy(aCase);
         aCase.accept();
         caseRepository.save(aCase);
-        return new AcceptCaseResult(true);
+        return new EndRegistrationCommandResult(true);
     }
 }

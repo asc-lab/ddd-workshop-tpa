@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class AcceptCaseResult {
+public class EndRegistrationCommandResult {
     private boolean success;
 }
