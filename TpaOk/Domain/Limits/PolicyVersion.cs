@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NodaMoney;
 
 namespace TpaOk.Domain.Limits
 {
@@ -22,7 +23,7 @@ namespace TpaOk.Domain.Limits
             return CoveredServices.Exists(cs => cs.ServiceCode == serviceCode);
         }
 
-        public object CoPaymentFor(string serviceCode)
+        public CoPayment CoPaymentFor(string serviceCode)
         {
             return CoveredServices.FirstOrDefault(cs => cs.ServiceCode == serviceCode)?.CoPayment;
         }
@@ -41,16 +42,37 @@ namespace TpaOk.Domain.Limits
     
     public abstract class CoPayment
     {
-    
+        public abstract Money Calculate(CaseService caseService);
     }
 
     public class PercentCoPayment : CoPayment
     {
-        
+        private readonly decimal _percent;
+        public PercentCoPayment(decimal percent)
+        {
+            _percent = percent;
+        }
+
+        public override Money Calculate(CaseService caseService)
+        {
+            var coPayment = caseService.Cost * _percent;
+            return coPayment;
+        }
     }
 
     public class AmountCoPayment : CoPayment
     {
-        
+        private readonly decimal _amount;
+
+        public AmountCoPayment(decimal amount)
+        {
+            _amount = amount;
+        }
+
+        public override Money Calculate(CaseService caseService)
+        {
+            var coPayment = Money.Euro(caseService.Qt * _amount);
+            return coPayment > caseService.Cost ? caseService.Cost : coPayment;
+        }
     }
 }

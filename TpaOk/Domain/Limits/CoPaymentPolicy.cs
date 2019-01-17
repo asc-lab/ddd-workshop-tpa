@@ -27,7 +27,7 @@ namespace TpaOk.Domain.Limits
                 return new CoPaymentApplicationResult(Money.Euro(0));
             }
 
-            return null;
+            return new CoPaymentApplicationResult(coPayment.Calculate(caseService));
         }
     }
 

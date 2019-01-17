@@ -10,23 +10,95 @@ namespace TpaOk.Tests
         {
             {
                 1, 
-                new PolicyVersion
-                {
-                    PolicyId    = 1,
-                    PolicyFrom = new DateTime(2019,1,1),
-                    PolicyTo = new DateTime(2019,12,31),
-                    Insureds = new List<Insured>()
-                    {
-                        new Insured { InsuredId = 1}
-                    },
-                    CoveredServices = new List<CoveredService>()
-                    {
-                        new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null}
-                    }
-                } 
+                NoCoPaymentNoLimitsPolicy() 
+            },
+            {
+                3,
+                TenPercentPaymentNoLimitsPolicy()
+            },
+            {
+                4,
+                FiveteenAmountPaymentNoLimitsPolicy()
+            },
+            {
+                5,
+                OverCopayment110AmountPaymentNoLimitsPolicy()
             }
         };
+
+        private static PolicyVersion NoCoPaymentNoLimitsPolicy()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 1,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null}
+                }
+            };
+        }
         
+        private static PolicyVersion TenPercentPaymentNoLimitsPolicy()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 3,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = new PercentCoPayment(0.1m)}
+                }
+            };
+        }
+        
+        private static PolicyVersion FiveteenAmountPaymentNoLimitsPolicy()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 4,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = new AmountCoPayment(15m)}
+                }
+            };
+        }
+        
+        private static PolicyVersion OverCopayment110AmountPaymentNoLimitsPolicy()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 5,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = new AmountCoPayment(110m)}
+                }
+            };
+        }
+
+
         public PolicyVersion GetVersionValidAt(int policyId, DateTime theDate)
         {
             if (_policyVersions.ContainsKey(policyId))
