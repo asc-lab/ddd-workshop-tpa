@@ -45,16 +45,70 @@ namespace TpaOk.Domain.Limits
     {
         public int InsuredId { get; set; }
     }
+
+    public abstract class LimitPeriod
+    {
+        public abstract Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion);
+    }
+
+    public class PolicyYearLimitPeriod : LimitPeriod
+    {
+        public override Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion)
+        {
+            //TODO: handle rok przestepny
+            return Period.Between
+            (
+                new DateTime(caseServiceDate.Year, policyVersion.PolicyFrom.Month, policyVersion.PolicyFrom.Day),
+                new DateTime(caseServiceDate.Year, policyVersion.PolicyTo.Month, policyVersion.PolicyTo.Day)
+            );
+        }
+    }
     
+    public class CalendarYearLimitPeriod : LimitPeriod
+    {
+        public override Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion)
+        {
+            return Period.Yearly(caseServiceDate.Year);
+        }
+    }
+    
+    public class PerCaseLimitPeriod : LimitPeriod
+    {
+        public override Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion)
+        {
+            return Period.Forever();
+        }
+    }
+
     public abstract class Limit
     {
-        public abstract LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit);
+        public LimitPeriod LimitPeriod { get; }
+        
+        public abstract LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit,
+            LimitConsumption currentLimitConsumption);
+        
+
+        protected Limit(LimitPeriod limitPeriod)
+        {
+            LimitPeriod = limitPeriod;
+        }
+
+        public Period CalculatePeriod(DateTime caseServiceDate, PolicyVersion policyVersion)
+        {
+            return LimitPeriod.Calculate(caseServiceDate, policyVersion);
+        }
     }
 
     public class QuantityLimit : Limit
     {
-        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit)
+        public QuantityLimit(LimitPeriod limitPeriod) : base(limitPeriod)
         {
+        }
+
+        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit,
+            LimitConsumption currentLimitConsumption)
+        {
+            
             throw new NotImplementedException();
         }
     }
@@ -63,36 +117,36 @@ namespace TpaOk.Domain.Limits
     {
         private Money _amount;
 
-        public AmountLimit(decimal amount)
+        public AmountLimit(decimal amount, LimitPeriod limitPeriod) : base(limitPeriod)
         {
             _amount = Money.Euro(amount);
         }
 
-        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit)
+        public override LimitCalculation Calculate(CalculateCostSplitAndReserveLimitsResult costSplit,
+            LimitConsumption currentLimitConsumption)
         {
-            if (costSplit.TuCost > _amount)
+            var currentMax = _amount - currentLimitConsumption.ConsumedAmount;
+            if (costSplit.TuCost > currentMax)
             {
-                return new LimitCalculation
-                {
-                    LimitConsumption = _amount,
-                    NotCoveredAmount = costSplit.TuCost - _amount
-                };
+                return new LimitCalculation(currentMax,costSplit.TuCost - currentMax);
             }
             else
             {
-                return new LimitCalculation
-                {
-                    LimitConsumption = costSplit.TuCost,
-                    NotCoveredAmount = Money.Euro(0)
-                };
+                return new LimitCalculation(costSplit.TuCost, Money.Euro(0));
             }
         }
     }
 
     public class LimitCalculation
     {
-        public Money LimitConsumption { get; set; }
-        public Money NotCoveredAmount { get; set; }
+        public Money LimitConsumption { get; }
+        public Money NotCoveredAmount { get; }
+
+        public LimitCalculation(Money limitConsumption, Money notCoveredAmount)
+        {
+            LimitConsumption = limitConsumption;
+            NotCoveredAmount = notCoveredAmount;
+        }
     }
 
     public abstract class CoPayment

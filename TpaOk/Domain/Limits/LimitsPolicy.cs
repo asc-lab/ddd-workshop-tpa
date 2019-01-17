@@ -5,10 +5,12 @@ namespace TpaOk.Domain.Limits
     public class LimitsPolicy
     {
         private readonly PolicyVersion _policyVersion;
+        private readonly ILimitConsumptionsRepository _limitConsumptionsRepository;
 
-        public LimitsPolicy(PolicyVersion policyVersion)
+        public LimitsPolicy(PolicyVersion policyVersion, ILimitConsumptionsRepository limitConsumptionsRepository)
         {
             _policyVersion = policyVersion;
+            _limitConsumptionsRepository = limitConsumptionsRepository;
         }
         
         public LimitsApplicationResult Apply(Case @case, CaseService caseService,
@@ -25,7 +27,14 @@ namespace TpaOk.Domain.Limits
                 return LimitsApplicationResult.NoApplied();
             }
 
-            var limitCalculation = limit.Calculate(costSplit);
+            var currentLimitConsumption = _limitConsumptionsRepository.GetLimitConsumption
+            (
+                @case.PolicyId,
+                caseService.ServiceCode,
+                @case.InsuredId,
+                limit.CalculatePeriod(caseService.Date, _policyVersion)
+            );
+            var limitCalculation = limit.Calculate(costSplit, currentLimitConsumption);
             
             return LimitsApplicationResult.Applied(limitCalculation);
         }

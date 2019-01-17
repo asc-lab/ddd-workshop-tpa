@@ -27,6 +27,10 @@ namespace TpaOk.Tests
             {
                 6,
                 AmountLimitPolicy()
+            },
+            {
+                7,
+                AmountLimitPolicyWithConsumptions()
             }
         };
 
@@ -115,11 +119,28 @@ namespace TpaOk.Tests
                 },
                 CoveredServices = new List<CoveredService>()
                 {
-                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500)}
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod())}
                 }
             };
         }
 
+        private static PolicyVersion AmountLimitPolicyWithConsumptions()
+        {
+            return new PolicyVersion
+            {
+                PolicyId    = 7,
+                PolicyFrom = new DateTime(2019,1,1),
+                PolicyTo = new DateTime(2019,12,31),
+                Insureds = new List<Insured>()
+                {
+                    new Insured { InsuredId = 1}
+                },
+                CoveredServices = new List<CoveredService>()
+                {
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod())}
+                }
+            };
+        }
 
         public PolicyVersion GetVersionValidAt(int policyId, DateTime theDate)
         {

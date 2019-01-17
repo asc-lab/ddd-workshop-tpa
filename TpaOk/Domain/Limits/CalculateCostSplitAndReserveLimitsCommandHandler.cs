@@ -5,10 +5,12 @@ namespace TpaOk.Domain.Limits
     public class CalculateCostSplitAndReserveLimitsCommandHandler
     {
         private readonly IPolicyRepository _policyRepository;
+        private readonly ILimitConsumptionsRepository _limitConsumptionsRepositoryRepository;
 
-        public CalculateCostSplitAndReserveLimitsCommandHandler(IPolicyRepository policyRepository)
+        public CalculateCostSplitAndReserveLimitsCommandHandler(IPolicyRepository policyRepository, ILimitConsumptionsRepository limitConsumptionsRepositoryRepository)
         {
             _policyRepository = policyRepository;
+            _limitConsumptionsRepositoryRepository = limitConsumptionsRepositoryRepository;
         }
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
@@ -22,7 +24,7 @@ namespace TpaOk.Domain.Limits
              
                 var serviceCoveredPolicy = new ServiceCoveredPolicy(policyVersionAtServiceDate);
                 var coPaymentPolicy = new CoPaymentPolicy(policyVersionAtServiceDate);
-                var limitPolicy = new LimitsPolicy(policyVersionAtServiceDate);
+                var limitPolicy = new LimitsPolicy(policyVersionAtServiceDate, _limitConsumptionsRepositoryRepository);
                 
                 var serviceCoveredPolicyResult = serviceCoveredPolicy.Apply(cmd.Case, caseService);
                 costSplit.Apply(serviceCoveredPolicyResult);
