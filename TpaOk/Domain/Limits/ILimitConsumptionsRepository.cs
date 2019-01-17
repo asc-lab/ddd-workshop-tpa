@@ -6,5 +6,6 @@ namespace TpaOk.Domain.Limits
     {
         LimitConsumption GetLimitConsumption(int policyId, string serviceCode, int insuredId, Period period);
         void Add(Consumption consumption);
+        void RemoveForCase(string caseNumber);
     }
 }

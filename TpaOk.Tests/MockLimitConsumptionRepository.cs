@@ -33,5 +33,10 @@ namespace TpaOk.Tests
         {
             _consumptions.Add(consumption);
         }
+
+        public void RemoveForCase(string caseNumber)
+        {
+            _consumptions.RemoveAll(c => c.CaseNumber == caseNumber);
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace TpaOk.Domain.Limits
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
+            _limitConsumptionsRepositoryRepository.RemoveForCase(cmd.Case.Number);
+            
             var costSplit = CalculateCostSplitAndReserveLimitsResult.Initial(cmd.Case);
 
             foreach (var caseService in cmd.Case.Services)
