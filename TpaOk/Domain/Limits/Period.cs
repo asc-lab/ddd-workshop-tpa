@@ -27,5 +27,16 @@ namespace TpaOk.Domain.Limits
         {
             return Between(new DateTime(year, 1, 1), new DateTime(year, 12, 31));
         }
+
+        public bool Contains(DateTime theDate)
+        {
+            if (theDate > To)
+                return false;
+
+            if (theDate < From)
+                return false;
+            
+            return true;
+        }
     }
 }

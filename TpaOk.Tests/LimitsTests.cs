@@ -8,8 +8,14 @@ namespace TpaOk.Tests
 {
     public class LimitsTests
     {
-        private CalculateCostSplitAndReserveLimitsCommandHandler cmdHandler =
-            new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository(), new MockLimitConsumptionRepository());
+        private ILimitConsumptionsRepository limitConsumptionsRepository;
+        private CalculateCostSplitAndReserveLimitsCommandHandler cmdHandler;
+
+        public LimitsTests()
+        {
+            limitConsumptionsRepository = new MockLimitConsumptionRepository();
+            cmdHandler = new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository(), limitConsumptionsRepository);
+        }
         
         [Fact]
         public void AmountLimitNotExceeded_NoPreviousConsumptions()
@@ -39,7 +45,7 @@ namespace TpaOk.Tests
             Assert.Equal(Money.Euro(0), result.InsuredCost);
             Assert.Equal(Money.Euro(100), result.TuCost);
             Assert.Equal(Money.Euro(100), result.TotalCost);
-            Assert.Equal(Money.Euro(100), result.LimitConsumption);
+            Assert.Equal(Money.Euro(100), result.AmountLimitConsumption);
         }
         
         [Fact]
@@ -70,7 +76,7 @@ namespace TpaOk.Tests
             Assert.Equal(Money.Euro(100), result.InsuredCost);
             Assert.Equal(Money.Euro(500), result.TuCost);
             Assert.Equal(Money.Euro(600), result.TotalCost);
-            Assert.Equal(Money.Euro(500), result.LimitConsumption);
+            Assert.Equal(Money.Euro(500), result.AmountLimitConsumption);
         }
         
         [Fact]
@@ -94,7 +100,8 @@ namespace TpaOk.Tests
                 }
             };
             
-            //TODO: previous consumption 400
+            //and
+            limitConsumptionsRepository.Add(new Consumption(7,1,"CASE8777","KONS_INTERNISTA",new DateTime(2019,1,9),Money.Euro(400),0));
 
             //when
             var result = cmdHandler.Handle(new CalculateCostSplitAndReserveLimitsCommand(medCase));
@@ -103,7 +110,7 @@ namespace TpaOk.Tests
             Assert.Equal(Money.Euro(100), result.InsuredCost);
             Assert.Equal(Money.Euro(100), result.TuCost);
             Assert.Equal(Money.Euro(200), result.TotalCost);
-            Assert.Equal(Money.Euro(100), result.LimitConsumption); //TODO: ? czy to ma byc total zuzycie czy tylko z tego case'a
+            Assert.Equal(Money.Euro(100), result.AmountLimitConsumption); //TODO: ? czy to ma byc total zuzycie czy tylko z tego case'a
         }
     }
 }
