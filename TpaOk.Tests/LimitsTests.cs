@@ -130,23 +130,20 @@ namespace TpaOk.Tests
                     {
                         ServiceCode = "KONS_INTERNISTA",
                         Date = new DateTime(2019,1,10),
-                        Price = Money.Euro(500),
+                        Price = Money.Euro(520),
                         Qt = 1
                     }
                 }
             };
-            
-            //and
-            limitConsumptionsRepository.Add(new Consumption(7,1,"CASE8777","KONS_INTERNISTA",new DateTime(2019,1,9),Money.Euro(400),0));
 
             //when
             var result = cmdHandler.Handle(new CalculateCostSplitAndReserveLimitsCommand(medCase));
 
             //then
-            Assert.Equal(Money.Euro(50), result.InsuredCost);
-            Assert.Equal(Money.Euro(450), result.TuCost);
-            Assert.Equal(Money.Euro(500), result.TotalCost);
-            Assert.Equal(Money.Euro(450), result.AmountLimitConsumption); //TODO: ? czy to ma byc total zuzycie czy tylko z tego case'a
+            Assert.Equal(Money.Euro(52), result.InsuredCost);
+            Assert.Equal(Money.Euro(468), result.TuCost);
+            Assert.Equal(Money.Euro(520), result.TotalCost);
+            Assert.Equal(Money.Euro(468), result.AmountLimitConsumption); //TODO: ? czy to ma byc total zuzycie czy tylko z tego case'a
         }
         
         [Fact]
@@ -169,9 +166,6 @@ namespace TpaOk.Tests
                     }
                 }
             };
-            
-            //and
-            limitConsumptionsRepository.Add(new Consumption(7,1,"CASE8777","KONS_INTERNISTA",new DateTime(2019,1,9),Money.Euro(400),0));
 
             //when
             var result = cmdHandler.Handle(new CalculateCostSplitAndReserveLimitsCommand(medCase));

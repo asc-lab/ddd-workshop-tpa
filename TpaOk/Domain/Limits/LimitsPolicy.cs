@@ -36,7 +36,7 @@ namespace TpaOk.Domain.Limits
                 @case.InsuredId,
                 limit.CalculatePeriod(caseService.Date, _policyVersion)
             );
-            var limitCalculation = limit.Calculate(costSplit, currentLimitConsumption);
+            var limitCalculation = limit.Calculate(costSplit.CostSplitForCaseService(caseService), currentLimitConsumption);
             
             return LimitsApplicationResult.Applied(limitCalculation);
         }

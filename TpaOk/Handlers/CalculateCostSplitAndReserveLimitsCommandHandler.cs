@@ -1,7 +1,7 @@
-using TpaOk.Domain.Limits;
-using TpaOk.Interfaces;
+using System;
+using NodaMoney;
 
-namespace TpaOk.Commands
+namespace TpaOk.Domain.Limits
 {
     public class CalculateCostSplitAndReserveLimitsCommandHandler
     {
@@ -16,6 +16,8 @@ namespace TpaOk.Commands
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
+            _limitConsumptionsRepositoryRepository.RemoveForCase(cmd.Case.Number);
+            
             var costSplit = CalculateCostSplitAndReserveLimitsResult.Initial(cmd.Case);
 
             foreach (var caseService in cmd.Case.Services)
@@ -42,7 +44,11 @@ namespace TpaOk.Commands
                 }
             }
 
+
+
             return costSplit;
         }
     }
+
+
 }

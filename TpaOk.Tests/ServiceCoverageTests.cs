@@ -10,7 +10,7 @@ namespace TpaOk.Tests
     public class ServiceCoverageTests
     {   
         private CalculateCostSplitAndReserveLimitsCommandHandler cmdHandler =
-            new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository(), null);
+            new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository(), new MockLimitConsumptionRepository());
         
         [Fact]
         public void NoLimitsAndNoPreviousConsumption_TuPaysAll()
