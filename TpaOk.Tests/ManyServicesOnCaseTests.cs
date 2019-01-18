@@ -10,12 +10,12 @@ namespace TpaOk.Tests
     public class ManyServicesOnCaseTests
     {
         private ILimitConsumptionsRepository limitConsumptionsRepository;
-        private CalculateCostSplitAndReserveLimitsCommandHandler cmdHandler;
+        private CalculateCostSplitAndReserveLimitsHandler cmdHandler;
 
         public ManyServicesOnCaseTests()
         {
             limitConsumptionsRepository = new MockLimitConsumptionRepository();
-            cmdHandler = new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository(), limitConsumptionsRepository);
+            cmdHandler = new CalculateCostSplitAndReserveLimitsHandler(new MockPolicyRepository(), limitConsumptionsRepository);
         }
 
         [Fact]

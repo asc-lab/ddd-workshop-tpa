@@ -6,13 +6,13 @@ using TpaOk.Domain.Limits;
 
 namespace TpaOk.Commands
 {
-    public class CalculateCostSplitAndReserveLimitsCommandHandler
+    public class CalculateCostSplitAndReserveLimitsHandler
     {
         private readonly IPolicyRepository _policyRepository;
         private readonly ILimitConsumptionsRepository _limitConsumptionsRepositoryRepository;
         private readonly CostSplitPoliciesFactory _costSplitPoliciesFactory;
 
-        public CalculateCostSplitAndReserveLimitsCommandHandler(IPolicyRepository policyRepository, ILimitConsumptionsRepository limitConsumptionsRepositoryRepository)
+        public CalculateCostSplitAndReserveLimitsHandler(IPolicyRepository policyRepository, ILimitConsumptionsRepository limitConsumptionsRepositoryRepository)
         {
             _policyRepository = policyRepository;
             _limitConsumptionsRepositoryRepository = limitConsumptionsRepositoryRepository;
@@ -23,19 +23,14 @@ namespace TpaOk.Commands
         {
             ClearPreviousConsumptionForCase(cmd);
             
-            var costSplitServices = CalculateCostSplitForServices(cmd);
-
+            var costSplitServices = SplitCostForServices(cmd);
 
             return CalculateCostSplitAndReserveLimitsResult.For(costSplitServices);
         }
 
-        private List<CaseServiceCostSplit> CalculateCostSplitForServices(CalculateCostSplitAndReserveLimitsCommand cmd)
+        private List<CaseServiceCostSplit> SplitCostForServices(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
-            var costSplitServices = cmd
-                .Case
-                .Services
-                .Select(s => new CaseServiceCostSplit(cmd.Case, s))
-                .ToList();
+            var costSplitServices = BuildServicesList(cmd.Case);
 
             foreach (var caseService in costSplitServices)
             {
@@ -51,6 +46,14 @@ namespace TpaOk.Commands
             }
 
             return costSplitServices;
+        }
+
+        private static List<CaseServiceCostSplit> BuildServicesList(Case @case)
+        {
+            return @case
+                .Services
+                .Select(s => new CaseServiceCostSplit(@case, s))
+                .ToList();
         }
 
         private void SaveConsumptions(List<Consumption> consumptions)

@@ -9,8 +9,8 @@ namespace TpaOk.Tests
 {
     public class CoPaymetTests
     {
-        private CalculateCostSplitAndReserveLimitsCommandHandler cmdHandler =
-            new CalculateCostSplitAndReserveLimitsCommandHandler(new MockPolicyRepository(), new MockLimitConsumptionRepository());
+        private CalculateCostSplitAndReserveLimitsHandler cmdHandler =
+            new CalculateCostSplitAndReserveLimitsHandler(new MockPolicyRepository(), new MockLimitConsumptionRepository());
         
         [Fact]
         public void NoCopayment_TuPaysAll()

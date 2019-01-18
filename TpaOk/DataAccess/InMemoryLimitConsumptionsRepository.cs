@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NodaMoney;
 using TpaOk.Domain.Limits;
 
-namespace TpaOk.Tests
+namespace TpaOk.DataAccess
 {
-    public class MockLimitConsumptionRepository : ILimitConsumptionsRepository
+    public class InMemoryLimitConsumptionsRepository : ILimitConsumptionsRepository
     {
         private List<Consumption> _consumptions = new List<Consumption>();
         

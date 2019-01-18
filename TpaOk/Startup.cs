@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TpaOk.Commands;
+using TpaOk.DataAccess;
+using TpaOk.Domain.Limits;
 
 namespace TpaOk
 {
@@ -26,6 +29,10 @@ namespace TpaOk
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSingleton<ILimitConsumptionsRepository, InMemoryLimitConsumptionsRepository>();
+            services.AddSingleton<IPolicyRepository, InMemoryPolicyRepository>();
+            services.AddSingleton<CalculateCostSplitAndReserveLimitsHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
