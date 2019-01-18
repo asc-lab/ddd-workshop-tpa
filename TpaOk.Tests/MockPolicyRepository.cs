@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TpaOk.Domain.Limits;
+using TpaOk.Interfaces;
 
 namespace TpaOk.Tests
 {

@@ -1,6 +1,7 @@
 using System;
+using TpaOk.Domain.Limits;
 
-namespace TpaOk.Domain.Limits
+namespace TpaOk.Interfaces
 {
     public interface IPolicyRepository
     {
