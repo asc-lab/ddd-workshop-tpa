@@ -14,7 +14,7 @@ namespace TpaOk.Domain.Limits
         
         public CoPaymentApplicationResult Apply(CaseServiceCostSplit caseService)
         {
-            if (policyAtServiceDate==null) //TODO: remove
+            if (policyAtServiceDate==null)
             {
                 return CoPaymentApplicationResult.NotApplied();
             }

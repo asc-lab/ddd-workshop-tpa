@@ -57,7 +57,7 @@ namespace TpaOk.Domain.Limits
         
         private LimitsApplicationResult(bool isApplied)
         {
-            this.IsApplied = isApplied;
+            IsApplied = isApplied;
         }
 
         private LimitsApplicationResult(bool isApplied, Money limitConsumption, Money notCoveredAmount)
