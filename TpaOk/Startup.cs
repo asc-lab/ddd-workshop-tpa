@@ -29,9 +29,7 @@ namespace TpaOk
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.AddSingleton<ILimitConsumptionsRepository, InMemoryLimitConsumptionsRepository>();
-            services.AddSingleton<IPolicyRepository, InMemoryPolicyRepository>();
+            services.AddEf(Configuration);
             services.AddSingleton<CalculateCostSplitAndReserveLimitsHandler>();
         }
 
@@ -49,6 +47,7 @@ namespace TpaOk
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseEfInitializer();
         }
     }
 }

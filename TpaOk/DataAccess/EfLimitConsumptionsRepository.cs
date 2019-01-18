@@ -5,13 +5,19 @@ using TpaOk.Domain.Limits;
 
 namespace TpaOk.DataAccess
 {
-    public class InMemoryLimitConsumptionsRepository : ILimitConsumptionsRepository
+    public class EfLimitConsumptionsRepository : ILimitConsumptionsRepository
     {
-        private List<Consumption> _consumptions = new List<Consumption>();
-        
+        private readonly LimitsDbContext _dbContext;
+
+        public EfLimitConsumptionsRepository(LimitsDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public LimitConsumptionContainer GetLimitConsumption(CaseServiceCostSplit caseService, Limit limit, Period period)
         {
-            var consumptionsInPeriodQuery = _consumptions
+            var consumptionsInPeriodQuery = _dbContext
+                .Consumptions
                 .Where(c => c.PolicyId == caseService.Case.PolicyId)
                 .Where( c => c.ServiceCode == caseService.ServiceCode)
                 .Where(c => period.Contains(c.ConsumptionDate));
@@ -36,17 +42,17 @@ namespace TpaOk.DataAccess
 
         public void Add(Consumption consumption)
         {
-            _consumptions.Add(consumption);
+            _dbContext.Consumptions.Add(consumption);
         }
 
         public void Add(List<Consumption> consumptions)
         {
-            _consumptions.AddRange(consumptions);
+            _dbContext.Consumptions.AddRange(consumptions);
         }
 
         public void RemoveForCase(string caseNumber)
         {
-            _consumptions.RemoveAll(c => c.CaseNumber == caseNumber);
+            //_dbContext.Consumptions.De(c => c.CaseNumber == caseNumber);
         }
     }
 }

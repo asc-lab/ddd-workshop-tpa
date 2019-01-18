@@ -37,6 +37,7 @@ namespace TpaOk.Domain.Limits
 
     public class CoveredService
     {
+        public int CoveredServiceId { get; set; }
         public string ServiceCode { get; set; }
         public CoPayment CoPayment { get; set; }
         public Limit Limit { get; set; }
@@ -49,6 +50,7 @@ namespace TpaOk.Domain.Limits
 
     public abstract class LimitPeriod
     {
+        public int LimitPeriodId { get; private set; }
         public abstract Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion);
     }
 
@@ -83,12 +85,16 @@ namespace TpaOk.Domain.Limits
 
     public abstract class Limit
     {
+        public int LimitId {get; private set; }
         public LimitPeriod LimitPeriod { get; }
         public bool Shared { get; }
         
         public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer);
-        
+
+        protected Limit()
+        {
+        }
 
         protected Limit(LimitPeriod limitPeriod, bool shared)
         {
@@ -104,6 +110,10 @@ namespace TpaOk.Domain.Limits
 
     public class QuantityLimit : Limit
     {
+        protected QuantityLimit() : base()
+        {
+        }
+
         public QuantityLimit(LimitPeriod limitPeriod, bool shared) : base(limitPeriod, shared)
         {
         }
@@ -119,6 +129,10 @@ namespace TpaOk.Domain.Limits
     public class AmountLimit : Limit
     {
         private Money _amount;
+
+        protected AmountLimit() : base()
+        {
+        }
 
         public AmountLimit(decimal amount, LimitPeriod limitPeriod, bool shared) : base(limitPeriod, shared)
         {
@@ -159,11 +173,16 @@ namespace TpaOk.Domain.Limits
 
     public abstract class CoPayment
     {
+        public int CoPaymentId { get; set; }
         public abstract Money Calculate(CaseServiceCostSplit caseService);
     }
 
     public class PercentCoPayment : CoPayment
     {
+        protected PercentCoPayment()
+        {
+        }
+
         private readonly decimal _percent;
         public PercentCoPayment(decimal percent)
         {
@@ -181,6 +200,10 @@ namespace TpaOk.Domain.Limits
     {
         private readonly decimal _amount;
 
+        protected AmountCoPayment()
+        {
+        }
+        
         public AmountCoPayment(decimal amount)
         {
             _amount = amount;
