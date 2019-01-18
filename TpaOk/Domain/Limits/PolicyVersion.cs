@@ -85,7 +85,7 @@ namespace TpaOk.Domain.Limits
         public LimitPeriod LimitPeriod { get; }
         
         public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
-            LimitConsumption currentLimitConsumption);
+            LimitConsumptionContainer currentLimitConsumptionContainer);
         
 
         protected Limit(LimitPeriod limitPeriod)
@@ -106,7 +106,7 @@ namespace TpaOk.Domain.Limits
         }
 
         public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
-            LimitConsumption currentLimitConsumption)
+            LimitConsumptionContainer currentLimitConsumptionContainer)
         {
             
             throw new NotImplementedException();
@@ -123,9 +123,9 @@ namespace TpaOk.Domain.Limits
         }
 
         public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
-            LimitConsumption currentLimitConsumption)
+            LimitConsumptionContainer currentLimitConsumptionContainer)
         {
-            var currentMax = _amount - currentLimitConsumption.ConsumedAmount;
+            var currentMax = _amount - currentLimitConsumptionContainer.ConsumedAmount;
             if (costSplit.TuCost > currentMax)
             {
                 return new LimitCalculation(currentMax,costSplit.TuCost - currentMax);
