@@ -15,14 +15,27 @@ namespace TpaOk.Tests
         
         private List<Consumption> _consumptions = new List<Consumption>();
         
-        public LimitConsumptionContainer GetLimitConsumption(int policyId, string serviceCode, int insuredId, Period period)
+        public LimitConsumptionContainer GetLimitConsumption(CaseServiceCostSplit caseService, Limit limit, Period period)
         {
-            var consumptionsInPeriod = _consumptions
-                .Where(c => c.PolicyId == policyId && c.InsuredId == insuredId && c.ServiceCode == serviceCode &&
-                            period.Contains(c.ConsumptionDate));
+            var consumptionsInPeriodQuery = _consumptions
+                .Where(c => c.PolicyId == caseService.Case.PolicyId)
+                .Where( c => c.ServiceCode == caseService.ServiceCode)
+                .Where(c => period.Contains(c.ConsumptionDate));
 
-            var sumAmt = consumptionsInPeriod.Aggregate(Money.Euro(0), (sum, c) => sum + c.ConsumedAmount);
-            var sumQt = consumptionsInPeriod.Aggregate(0, (sum, c) => sum + c.ConsumedQuantity);
+            if (limit.LimitPeriod is PerCaseLimitPeriod)
+            {
+                consumptionsInPeriodQuery =
+                    consumptionsInPeriodQuery.Where(c => c.CaseNumber == caseService.Case.Number);
+            }
+
+            if (!limit.Shared)
+            {
+                consumptionsInPeriodQuery =
+                    consumptionsInPeriodQuery.Where(c => c.InsuredId == caseService.Case.InsuredId);
+            }
+                
+            var sumAmt = consumptionsInPeriodQuery.Aggregate(Money.Euro(0), (sum, c) => sum + c.ConsumedAmount);
+            var sumQt = consumptionsInPeriodQuery.Aggregate(0, (sum, c) => sum + c.ConsumedQuantity);
             
             return new LimitConsumptionContainer(sumAmt,sumQt);
         }

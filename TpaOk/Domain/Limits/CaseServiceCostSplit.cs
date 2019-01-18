@@ -5,7 +5,7 @@ using TpaOk.Commands;
 
 namespace TpaOk.Domain.Limits
 {
-    public class CaseServiceCostSplitZ
+    public class CaseServiceCostSplit
     {
         public Case Case { get; } //TODO: make it private?
         public CaseService CaseService { get; } //TODO: make it private?
@@ -20,7 +20,7 @@ namespace TpaOk.Domain.Limits
         public DateTime Date => CaseService.Date;
 
 
-        public CaseServiceCostSplitZ(Case @case, CaseService caseService)
+        public CaseServiceCostSplit(Case @case, CaseService caseService)
         {
             Case = @case;
             CaseService = caseService;

@@ -29,12 +29,12 @@ namespace TpaOk.Commands
             return CalculateCostSplitAndReserveLimitsResult.For(costSplitServices);
         }
 
-        private List<CaseServiceCostSplitZ> CalculateCostSplitForServices(CalculateCostSplitAndReserveLimitsCommand cmd)
+        private List<CaseServiceCostSplit> CalculateCostSplitForServices(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
             var costSplitServices = cmd
                 .Case
                 .Services
-                .Select(s => new CaseServiceCostSplitZ(cmd.Case, s))
+                .Select(s => new CaseServiceCostSplit(cmd.Case, s))
                 .ToList();
 
             foreach (var caseService in costSplitServices)

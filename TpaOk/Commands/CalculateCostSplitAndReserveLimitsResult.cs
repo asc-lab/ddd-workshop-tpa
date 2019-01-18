@@ -16,7 +16,7 @@ namespace TpaOk.Commands
         
         public Dictionary<CaseService, CaseServiceCostSplitResult> ServicesCostSplit { get; private set; }
 
-        public static CalculateCostSplitAndReserveLimitsResult For(List<CaseServiceCostSplitZ> caseServices)
+        public static CalculateCostSplitAndReserveLimitsResult For(List<CaseServiceCostSplit> caseServices)
         {
             return new CalculateCostSplitAndReserveLimitsResult
             {
@@ -44,7 +44,7 @@ namespace TpaOk.Commands
         public Money AmountLimitConsumption { get; private set; }
         public int QtLimitConsumption { get; set; }
 
-        public static CaseServiceCostSplitResult For(CaseServiceCostSplitZ caseService)
+        public static CaseServiceCostSplitResult For(CaseServiceCostSplit caseService)
         {
             return new CaseServiceCostSplitResult
             {

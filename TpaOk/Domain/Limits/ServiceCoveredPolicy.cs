@@ -12,7 +12,7 @@ namespace TpaOk.Domain.Limits
             this.policyAtServiceDate = policyAtServiceDate;
         }
 
-        public CoverageCheckResult Apply(CaseServiceCostSplitZ caseService)
+        public CoverageCheckResult Apply(CaseServiceCostSplit caseService)
         {
             if (policyAtServiceDate == null)
             {
@@ -44,7 +44,7 @@ namespace TpaOk.Domain.Limits
             return new CoverageCheckResult(true, null, Money.Euro(0));
         }
 
-        public static CoverageCheckResult NotCovered(NotCoveredReason notCoveredReason, CaseServiceCostSplitZ caseService)
+        public static CoverageCheckResult NotCovered(NotCoveredReason notCoveredReason, CaseServiceCostSplit caseService)
         {
             return new CoverageCheckResult(false, notCoveredReason, caseService.TotalCost);
         }

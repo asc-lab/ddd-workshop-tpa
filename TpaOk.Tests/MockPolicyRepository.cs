@@ -59,19 +59,19 @@ namespace TpaOk.Tests
                     {
                         ServiceCode = "KONS_INTERNISTA", 
                         CoPayment = new PercentCoPayment(0.1m),
-                        Limit = new AmountLimit(1000m, new PolicyYearLimitPeriod())
+                        Limit = new AmountLimit(1000m, new PolicyYearLimitPeriod(),false)
                     },
                     new CoveredService
                     {
                         ServiceCode = "KONS_LARYNGOLOG", 
                         CoPayment = new PercentCoPayment(0.1m),
-                        Limit = new AmountLimit(1200m, new PolicyYearLimitPeriod())
+                        Limit = new AmountLimit(1200m, new PolicyYearLimitPeriod(),false)
                     },
                     new CoveredService
                     {
                         ServiceCode = "KONS_GASTROLOG", 
                         CoPayment = null,
-                        Limit = new AmountLimit(500m, new PolicyYearLimitPeriod())
+                        Limit = new AmountLimit(500m, new PolicyYearLimitPeriod(),false)
                     },
                 }
             };
@@ -162,7 +162,7 @@ namespace TpaOk.Tests
                 },
                 CoveredServices = new List<CoveredService>()
                 {
-                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod())}
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod(),false)}
                 }
             };
         }
@@ -180,7 +180,7 @@ namespace TpaOk.Tests
                 },
                 CoveredServices = new List<CoveredService>()
                 {
-                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod())}
+                    new CoveredService {ServiceCode = "KONS_INTERNISTA", CoPayment = null, Limit = new AmountLimit(500, new PolicyYearLimitPeriod(),false)}
                 }
             };
         }
@@ -202,7 +202,7 @@ namespace TpaOk.Tests
                     {
                         ServiceCode = "KONS_INTERNISTA", 
                         CoPayment = new PercentCoPayment(0.1m), 
-                        Limit = new AmountLimit(500, new PolicyYearLimitPeriod())
+                        Limit = new AmountLimit(500, new PolicyYearLimitPeriod(),false)
                     }
                 }
             };

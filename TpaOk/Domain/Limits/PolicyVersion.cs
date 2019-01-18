@@ -56,7 +56,7 @@ namespace TpaOk.Domain.Limits
     {
         public override Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion)
         {
-            //TODO: handle rok przestepny
+            //TODO: handle leap year
             return Period.Between
             (
                 new DateTime(caseServiceDate.Year, policyVersion.PolicyFrom.Month, policyVersion.PolicyFrom.Day),
@@ -84,14 +84,16 @@ namespace TpaOk.Domain.Limits
     public abstract class Limit
     {
         public LimitPeriod LimitPeriod { get; }
+        public bool Shared { get; }
         
-        public abstract LimitCalculation Calculate(CaseServiceCostSplitZ costSplit,
+        public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer);
         
 
-        protected Limit(LimitPeriod limitPeriod)
+        protected Limit(LimitPeriod limitPeriod, bool shared)
         {
             LimitPeriod = limitPeriod;
+            Shared = shared;
         }
 
         public Period CalculatePeriod(DateTime caseServiceDate, PolicyVersion policyVersion)
@@ -102,11 +104,11 @@ namespace TpaOk.Domain.Limits
 
     public class QuantityLimit : Limit
     {
-        public QuantityLimit(LimitPeriod limitPeriod) : base(limitPeriod)
+        public QuantityLimit(LimitPeriod limitPeriod, bool shared) : base(limitPeriod, shared)
         {
         }
 
-        public override LimitCalculation Calculate(CaseServiceCostSplitZ costSplit,
+        public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer)
         {
             
@@ -118,12 +120,12 @@ namespace TpaOk.Domain.Limits
     {
         private Money _amount;
 
-        public AmountLimit(decimal amount, LimitPeriod limitPeriod) : base(limitPeriod)
+        public AmountLimit(decimal amount, LimitPeriod limitPeriod, bool shared) : base(limitPeriod, shared)
         {
             _amount = Money.Euro(amount);
         }
 
-        public override LimitCalculation Calculate(CaseServiceCostSplitZ costSplit,
+        public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer)
         {
             var currentMax = _amount - currentLimitConsumptionContainer.ConsumedAmount;
@@ -157,7 +159,7 @@ namespace TpaOk.Domain.Limits
 
     public abstract class CoPayment
     {
-        public abstract Money Calculate(CaseServiceCostSplitZ caseService);
+        public abstract Money Calculate(CaseServiceCostSplit caseService);
     }
 
     public class PercentCoPayment : CoPayment
@@ -168,7 +170,7 @@ namespace TpaOk.Domain.Limits
             _percent = percent;
         }
 
-        public override Money Calculate(CaseServiceCostSplitZ caseService)
+        public override Money Calculate(CaseServiceCostSplit caseService)
         {
             var coPayment = caseService.TotalCost * _percent;
             return coPayment;
@@ -184,7 +186,7 @@ namespace TpaOk.Domain.Limits
             _amount = amount;
         }
 
-        public override Money Calculate(CaseServiceCostSplitZ caseService)
+        public override Money Calculate(CaseServiceCostSplit caseService)
         {
             var coPayment = Money.Euro(caseService.Qt * _amount);
             return coPayment > caseService.TotalCost ? caseService.TotalCost: coPayment;

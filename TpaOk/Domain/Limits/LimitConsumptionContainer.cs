@@ -12,5 +12,10 @@ namespace TpaOk.Domain.Limits
             ConsumedAmount = consumedAmount;
             ConsumedQt = consumedQt;
         }
+
+        public static LimitConsumptionContainer Empty()
+        {
+            return new LimitConsumptionContainer(Money.Euro(0), 0);
+        }
     }
 }
