@@ -12,7 +12,7 @@ namespace TpaOk.Domain.Limits
             this.policyAtServiceDate = policyAtServiceDate;
         }
         
-        public CoPaymentApplicationResult Apply(Case @case, CaseService caseService)
+        public CoPaymentApplicationResult Apply(CaseServiceCostSplitZ caseService)
         {
             if (policyAtServiceDate==null) //TODO: remove
             {

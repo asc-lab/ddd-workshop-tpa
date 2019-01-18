@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NodaMoney;
 using TpaOk.Domain.Limits;
 
@@ -8,46 +10,60 @@ namespace TpaOk.Commands
     {
         private readonly IPolicyRepository _policyRepository;
         private readonly ILimitConsumptionsRepository _limitConsumptionsRepositoryRepository;
+        private readonly CostSplitPoliciesFactory _costSplitPoliciesFactory;
 
         public CalculateCostSplitAndReserveLimitsCommandHandler(IPolicyRepository policyRepository, ILimitConsumptionsRepository limitConsumptionsRepositoryRepository)
         {
             _policyRepository = policyRepository;
             _limitConsumptionsRepositoryRepository = limitConsumptionsRepositoryRepository;
+            _costSplitPoliciesFactory = new CostSplitPoliciesFactory(_policyRepository, _limitConsumptionsRepositoryRepository);
         }
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
-            _limitConsumptionsRepositoryRepository.RemoveForCase(cmd.Case.Number);
+            ClearPreviousConsumptionForCase(cmd);
             
-            var costSplit = CalculateCostSplitAndReserveLimitsResult.Initial(cmd.Case);
+            var costSplitServices = CalculateCostSplitForServices(cmd);
 
-            foreach (var caseService in cmd.Case.Services)
+
+            return CalculateCostSplitAndReserveLimitsResult.For(costSplitServices);
+        }
+
+        private List<CaseServiceCostSplitZ> CalculateCostSplitForServices(CalculateCostSplitAndReserveLimitsCommand cmd)
+        {
+            var costSplitServices = cmd
+                .Case
+                .Services
+                .Select(s => new CaseServiceCostSplitZ(cmd.Case, s))
+                .ToList();
+
+            foreach (var caseService in costSplitServices)
             {
-                var policyVersionAtServiceDate =
-                    _policyRepository.GetVersionValidAt(cmd.Case.PolicyId, caseService.Date);
-             
-                var serviceCoveredPolicy = new ServiceCoveredPolicy(policyVersionAtServiceDate);
-                var coPaymentPolicy = new CoPaymentPolicy(policyVersionAtServiceDate);
-                var limitPolicy = new LimitsPolicy(policyVersionAtServiceDate, _limitConsumptionsRepositoryRepository);
+                var costSplitPolicies = _costSplitPoliciesFactory.CreatePoliciesFor
+                (
+                    caseService.Case.PolicyId,
+                    caseService.Date
+                );
+
+                var consumptions = caseService.SplitCost(costSplitPolicies);
                 
-                var serviceCoveredPolicyResult = serviceCoveredPolicy.Apply(cmd.Case, caseService);
-                costSplit.Apply(caseService, serviceCoveredPolicyResult);
-
-                var coPaymentApplicationResult = coPaymentPolicy.Apply(cmd.Case, caseService);
-                costSplit.Apply(caseService, coPaymentApplicationResult);
-
-                var limitApplicationResult = limitPolicy.Apply(cmd.Case, caseService, costSplit);
-                costSplit.Apply(caseService, limitApplicationResult);
-                if (limitApplicationResult.IsApplied)
-                {
-                    _limitConsumptionsRepositoryRepository.Add(new Consumption(cmd.Case, caseService,
-                        costSplit.AmountLimitConsumption, costSplit.QtLimitConsumption));
-                }
+                SaveConsumptions(consumptions);
             }
 
+            return costSplitServices;
+        }
 
+        private void SaveConsumptions(List<Consumption> consumptions)
+        {
+            if (consumptions.Count > 0)
+            {
+                _limitConsumptionsRepositoryRepository.Add(consumptions);
+            }
+        }
 
-            return costSplit;
+        private void ClearPreviousConsumptionForCase(CalculateCostSplitAndReserveLimitsCommand cmd)
+        {
+            _limitConsumptionsRepositoryRepository.RemoveForCase(cmd.Case.Number);
         }
     }
 

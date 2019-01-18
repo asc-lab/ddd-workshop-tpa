@@ -14,90 +14,48 @@ namespace TpaOk.Commands
         public Money AmountLimitConsumption => ServicesCostSplit.Values.Aggregate(Money.Euro(0), (sum, i) => sum + i.AmountLimitConsumption);
         public int QtLimitConsumption => ServicesCostSplit.Values.Aggregate(0, (sum, i) => sum + i.QtLimitConsumption);
         
-        public Dictionary<CaseService, CaseServiceCostSplit> ServicesCostSplit { get; private set; }
+        public Dictionary<CaseService, CaseServiceCostSplitResult> ServicesCostSplit { get; private set; }
 
-        public static CalculateCostSplitAndReserveLimitsResult Initial(Case @case)
+        public static CalculateCostSplitAndReserveLimitsResult For(List<CaseServiceCostSplitZ> caseServices)
         {
             return new CalculateCostSplitAndReserveLimitsResult
             {
-                ServicesCostSplit = @case.Services.ToDictionary
+                ServicesCostSplit = caseServices.ToDictionary
                 (
-                    cs => cs, 
-                    cs => CaseServiceCostSplit.Initial(cs)
+                    cs => cs.CaseService, 
+                    CaseServiceCostSplitResult.For
                 )
             };
         }
-
-        public CaseServiceCostSplit CostSplitForCaseService(CaseService caseService)
+        
+        public CaseServiceCostSplitResult CostSplitForCaseService(CaseService caseService)
         {
             return ServicesCostSplit[caseService];
         }
 
-        public void Apply(CaseService caseService, CoverageCheckResult serviceCoveredPolicyResult)
-        {
-            CostSplitForCaseService(caseService).Apply(serviceCoveredPolicyResult);
-        }
-
-        public void Apply(CaseService caseService, CoPaymentApplicationResult coPaymentResult)
-        {
-            CostSplitForCaseService(caseService).Apply(coPaymentResult);
-        }
-
-        public void Apply(CaseService caseService, LimitsApplicationResult limitsApplicationResult)
-        {
-            CostSplitForCaseService(caseService).Apply(limitsApplicationResult);
-        }
+        
     }
 
-    public class CaseServiceCostSplit
+    public class CaseServiceCostSplitResult
     {
-        public CaseService CaseService { get; private set; }
         public Money InsuredCost { get; private set; }
         public Money TuCost { get; private set; }
         public Money TotalCost { get; private set; }
         public Money AmountLimitConsumption { get; private set; }
         public int QtLimitConsumption { get; set; }
-        
-        public static CaseServiceCostSplit Initial(CaseService caseService)
+
+        public static CaseServiceCostSplitResult For(CaseServiceCostSplitZ caseService)
         {
-            return new CaseServiceCostSplit
+            return new CaseServiceCostSplitResult
             {
-                CaseService = caseService,
-                InsuredCost = Money.Euro(0),
-                TuCost = caseService.Cost,
-                TotalCost = caseService.Cost,
-                AmountLimitConsumption = Money.Euro(0),
-                QtLimitConsumption = 0
+                InsuredCost = caseService.InsuredCost,
+                TuCost = caseService.TuCost,
+                TotalCost = caseService.TotalCost,
+                AmountLimitConsumption = caseService.AmountLimitConsumption,
+                QtLimitConsumption = caseService.QtLimitConsumption
             };
         }
         
-        public void Apply(CoverageCheckResult serviceCoveredPolicyResult)
-        {
-            if (!serviceCoveredPolicyResult.IsCovered)
-            {
-                TuCost -= serviceCoveredPolicyResult.NotCoveredAmount;
-                InsuredCost += serviceCoveredPolicyResult.NotCoveredAmount;
-            }
-        }
-
-        public void Apply(CoPaymentApplicationResult coPaymentResult)
-        {
-            if (InsuredCost != TotalCost && coPaymentResult.NotCoveredAmount > Money.Euro(0))
-            {
-                InsuredCost += coPaymentResult.NotCoveredAmount;
-                TuCost -= coPaymentResult.NotCoveredAmount;
-            }
-        }
-
-        public void Apply(LimitsApplicationResult limitsApplicationResult)
-        {
-            if (InsuredCost != TotalCost && limitsApplicationResult.IsApplied)
-            {
-                InsuredCost += limitsApplicationResult.NotCoveredAmount;
-                TuCost -= limitsApplicationResult.NotCoveredAmount;
-                AmountLimitConsumption += limitsApplicationResult.LimitConsumption;
-            }
-        }
     }
 }
 

@@ -14,8 +14,7 @@ namespace TpaOk.Domain.Limits
             _limitConsumptionsRepository = limitConsumptionsRepository;
         }
         
-        public LimitsApplicationResult Apply(Case @case, CaseService caseService,
-            CalculateCostSplitAndReserveLimitsResult costSplit)
+        public LimitsApplicationResult Apply(CaseServiceCostSplitZ caseService)
         {
             if (_policyVersion == null)
             {
@@ -30,12 +29,12 @@ namespace TpaOk.Domain.Limits
 
             var currentLimitConsumption = _limitConsumptionsRepository.GetLimitConsumption
             (
-                @case.PolicyId,
+                caseService.Case.PolicyId,
                 caseService.ServiceCode,
-                @case.InsuredId,
+                caseService.Case.InsuredId,
                 limit.CalculatePeriod(caseService.Date, _policyVersion)
             );
-            var limitCalculation = limit.Calculate(costSplit.CostSplitForCaseService(caseService), currentLimitConsumption);
+            var limitCalculation = limit.Calculate(caseService, currentLimitConsumption);
             
             return LimitsApplicationResult.Applied(limitCalculation);
         }

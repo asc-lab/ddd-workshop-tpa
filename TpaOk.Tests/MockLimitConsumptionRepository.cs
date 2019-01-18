@@ -32,6 +32,11 @@ namespace TpaOk.Tests
             _consumptions.Add(consumption);
         }
 
+        public void Add(List<Consumption> consumptions)
+        {
+            _consumptions.AddRange(consumptions);
+        }
+
         public void RemoveForCase(string caseNumber)
         {
             _consumptions.RemoveAll(c => c.CaseNumber == caseNumber);

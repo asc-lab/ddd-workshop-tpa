@@ -85,7 +85,7 @@ namespace TpaOk.Domain.Limits
     {
         public LimitPeriod LimitPeriod { get; }
         
-        public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
+        public abstract LimitCalculation Calculate(CaseServiceCostSplitZ costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer);
         
 
@@ -106,7 +106,7 @@ namespace TpaOk.Domain.Limits
         {
         }
 
-        public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
+        public override LimitCalculation Calculate(CaseServiceCostSplitZ costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer)
         {
             
@@ -123,7 +123,7 @@ namespace TpaOk.Domain.Limits
             _amount = Money.Euro(amount);
         }
 
-        public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
+        public override LimitCalculation Calculate(CaseServiceCostSplitZ costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer)
         {
             var currentMax = _amount - currentLimitConsumptionContainer.ConsumedAmount;
@@ -157,7 +157,7 @@ namespace TpaOk.Domain.Limits
 
     public abstract class CoPayment
     {
-        public abstract Money Calculate(CaseService caseService);
+        public abstract Money Calculate(CaseServiceCostSplitZ caseService);
     }
 
     public class PercentCoPayment : CoPayment
@@ -168,9 +168,9 @@ namespace TpaOk.Domain.Limits
             _percent = percent;
         }
 
-        public override Money Calculate(CaseService caseService)
+        public override Money Calculate(CaseServiceCostSplitZ caseService)
         {
-            var coPayment = caseService.Cost * _percent;
+            var coPayment = caseService.TotalCost * _percent;
             return coPayment;
         }
     }
@@ -184,10 +184,10 @@ namespace TpaOk.Domain.Limits
             _amount = amount;
         }
 
-        public override Money Calculate(CaseService caseService)
+        public override Money Calculate(CaseServiceCostSplitZ caseService)
         {
             var coPayment = Money.Euro(caseService.Qt * _amount);
-            return coPayment > caseService.Cost ? caseService.Cost : coPayment;
+            return coPayment > caseService.TotalCost ? caseService.TotalCost: coPayment;
         }
     }
 }

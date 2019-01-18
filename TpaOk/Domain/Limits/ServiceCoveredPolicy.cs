@@ -12,14 +12,14 @@ namespace TpaOk.Domain.Limits
             this.policyAtServiceDate = policyAtServiceDate;
         }
 
-        public CoverageCheckResult Apply(Case @case, CaseService caseService)
+        public CoverageCheckResult Apply(CaseServiceCostSplitZ caseService)
         {
             if (policyAtServiceDate == null)
             {
                 return CoverageCheckResult.NotCovered(NotCoveredReason.NoPolicyAtServiceDate, caseService);
             }
 
-            if (!policyAtServiceDate.CoversInsured(@case.InsuredId))
+            if (!policyAtServiceDate.CoversInsured(caseService.Case.InsuredId))
             {
                 return CoverageCheckResult.NotCovered(NotCoveredReason.InsuredNotFoundOnPolicy, caseService);
             }
@@ -44,9 +44,9 @@ namespace TpaOk.Domain.Limits
             return new CoverageCheckResult(true, null, Money.Euro(0));
         }
 
-        public static CoverageCheckResult NotCovered(NotCoveredReason notCoveredReason, CaseService caseService)
+        public static CoverageCheckResult NotCovered(NotCoveredReason notCoveredReason, CaseServiceCostSplitZ caseService)
         {
-            return new CoverageCheckResult(false, notCoveredReason, caseService.Cost);
+            return new CoverageCheckResult(false, notCoveredReason, caseService.TotalCost);
         }
         
         private CoverageCheckResult(bool isCovered, NotCoveredReason? notCoveredReason, Money notCoveredAmount)
