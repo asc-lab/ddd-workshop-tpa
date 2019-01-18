@@ -207,7 +207,7 @@ namespace TpaOk.Tests
             Assert.Equal(Money.Euro(200), result.InsuredCost);
             Assert.Equal(Money.Euro(0), result.TuCost);
             Assert.Equal(Money.Euro(200), result.TotalCost);
-            Assert.Equal(Money.Euro(200), result.AmountLimitConsumption); //TODO: ? czy to ma byc total zuzycie czy tylko z tego case'a
+            Assert.Equal(Money.Euro(0), result.AmountLimitConsumption); //TODO: ask business about this case
         }
     }
 }

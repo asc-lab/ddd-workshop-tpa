@@ -127,6 +127,11 @@ namespace TpaOk.Domain.Limits
             LimitConsumptionContainer currentLimitConsumptionContainer)
         {
             var currentMax = _amount - currentLimitConsumptionContainer.ConsumedAmount;
+            if (currentMax < Money.Euro(0))
+            {
+                currentMax = Money.Euro(0);
+            }
+            
             if (costSplit.TuCost > currentMax)
             {
                 return new LimitCalculation(currentMax,costSplit.TuCost - currentMax);
