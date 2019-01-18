@@ -1,6 +1,6 @@
 using TpaOk.Domain.Limits;
 
-namespace TpaOk.Interfaces
+namespace TpaOk.Domain.Limits
 {
     public interface ILimitConsumptionsRepository
     {

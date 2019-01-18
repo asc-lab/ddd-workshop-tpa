@@ -14,8 +14,6 @@ namespace TpaOk.Domain.Limits
         public Money TotalCost => Services.Aggregate(Money.Euro(0),  (sum,s) => sum + s.Cost);
     }
 
-}
-
     
     public class CaseService
     {
