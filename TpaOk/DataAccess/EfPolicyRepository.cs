@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TpaOk.Domain.Limits;
 
 namespace TpaOk.DataAccess
@@ -18,6 +19,12 @@ namespace TpaOk.DataAccess
         public PolicyVersion GetVersionValidAt(int policyId, DateTime theDate)
         {
             return _dbContext.PolicyVersions
+                .Include(v=>v.Insureds)
+                .Include(v => v.CoveredServices)
+                .ThenInclude(v => v.CoPayment)
+                .Include(v => v.CoveredServices)
+                .ThenInclude(v => v.Limit)
+                .ThenInclude(v => v.LimitPeriod)
                 .Where(v => v.PolicyId == policyId)
                 .Where(v => v.PolicyFrom <= theDate)
                 .Where(v => v.PolicyTo >= theDate)

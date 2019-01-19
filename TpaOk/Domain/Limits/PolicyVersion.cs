@@ -8,6 +8,7 @@ namespace TpaOk.Domain.Limits
 {
     public class PolicyVersion
     {
+        public int PolicyVersionId { get; private set; }
         public int PolicyId { get; set; }
         public List<Insured> Insureds { get; set; }
         public DateTime PolicyFrom { get; set; }
@@ -86,8 +87,8 @@ namespace TpaOk.Domain.Limits
     public abstract class Limit
     {
         public int LimitId {get; private set; }
-        public LimitPeriod LimitPeriod { get; }
-        public bool Shared { get; }
+        public LimitPeriod LimitPeriod { get; private set; }
+        public bool Shared { get; private set; }
         
         public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer);
@@ -128,7 +129,7 @@ namespace TpaOk.Domain.Limits
 
     public class AmountLimit : Limit
     {
-        private Money _amount;
+        public Money Amount { get; private set; }
 
         protected AmountLimit() : base()
         {
@@ -136,13 +137,13 @@ namespace TpaOk.Domain.Limits
 
         public AmountLimit(decimal amount, LimitPeriod limitPeriod, bool shared) : base(limitPeriod, shared)
         {
-            _amount = Money.Euro(amount);
+            Amount = Money.Euro(amount);
         }
 
         public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
             LimitConsumptionContainer currentLimitConsumptionContainer)
         {
-            var currentMax = _amount - currentLimitConsumptionContainer.ConsumedAmount;
+            var currentMax = Amount - currentLimitConsumptionContainer.ConsumedAmount;
             if (currentMax < Money.Euro(0))
             {
                 currentMax = Money.Euro(0);
@@ -183,22 +184,23 @@ namespace TpaOk.Domain.Limits
         {
         }
 
-        private readonly decimal _percent;
+        public decimal Percent { get; private set; }
+        
         public PercentCoPayment(decimal percent)
         {
-            _percent = percent;
+            Percent = percent;
         }
 
         public override Money Calculate(CaseServiceCostSplit caseService)
         {
-            var coPayment = caseService.TotalCost * _percent;
+            var coPayment = caseService.TotalCost * Percent;
             return coPayment;
         }
     }
 
     public class AmountCoPayment : CoPayment
     {
-        private readonly decimal _amount;
+        public decimal Amount { get; private set; }
 
         protected AmountCoPayment()
         {
@@ -206,12 +208,12 @@ namespace TpaOk.Domain.Limits
         
         public AmountCoPayment(decimal amount)
         {
-            _amount = amount;
+            Amount = amount;
         }
 
         public override Money Calculate(CaseServiceCostSplit caseService)
         {
-            var coPayment = Money.Euro(caseService.Qt * _amount);
+            var coPayment = Money.Euro(caseService.Qt * Amount);
             return coPayment > caseService.TotalCost ? caseService.TotalCost: coPayment;
         }
     }

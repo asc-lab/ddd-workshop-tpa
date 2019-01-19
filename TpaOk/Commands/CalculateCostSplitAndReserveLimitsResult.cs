@@ -8,46 +8,69 @@ namespace TpaOk.Commands
 {
     public class CalculateCostSplitAndReserveLimitsResult
     {
-        public Money InsuredCost => ServicesCostSplit.Values.Aggregate(Money.Euro(0), (sum, i) => sum + i.InsuredCost);
-        public Money TuCost => ServicesCostSplit.Values.Aggregate(Money.Euro(0), (sum, i) => sum + i.TuCost);
-        public Money TotalCost => ServicesCostSplit.Values.Aggregate(Money.Euro(0), (sum, i) => sum + i.TotalCost);
-        public Money AmountLimitConsumption => ServicesCostSplit.Values.Aggregate(Money.Euro(0), (sum, i) => sum + i.AmountLimitConsumption);
-        public int QtLimitConsumption => ServicesCostSplit.Values.Aggregate(0, (sum, i) => sum + i.QtLimitConsumption);
+        public Money InsuredCost { get; set; }
+        public Money TuCost { get; set; }
+        public Money TotalCost { get; set; }
+        public Money AmountLimitConsumption { get; set; }
+        public int QtLimitConsumption { get; set; }
         
-        public Dictionary<CaseService, CaseServiceCostSplitResult> ServicesCostSplit { get; private set; }
+        public List<CaseServiceCostSplitResult> ServicesCostSplit { get; set; }
 
         public static CalculateCostSplitAndReserveLimitsResult For(List<CaseServiceCostSplit> caseServices)
         {
             return new CalculateCostSplitAndReserveLimitsResult
-            {
-                ServicesCostSplit = caseServices.ToDictionary
-                (
-                    cs => cs.CaseService, 
-                    CaseServiceCostSplitResult.For
-                )
-            };
+            (
+            
+                caseServices.Select(CaseServiceCostSplitResult.For).ToList()
+
+            );
         }
         
         public CaseServiceCostSplitResult CostSplitForCaseService(CaseService caseService)
         {
-            return ServicesCostSplit[caseService];
+            return ServicesCostSplit.FirstOrDefault
+            (
+                s =>
+                    s.ServiceCode == caseService.ServiceCode
+                    && s.Date==caseService.Date
+                    && s.Price==caseService.Price
+            );
         }
 
-        
+        public CalculateCostSplitAndReserveLimitsResult()
+        {
+        }
+
+        public CalculateCostSplitAndReserveLimitsResult(
+            List<CaseServiceCostSplitResult> servicesCostSplit)
+        {
+            ServicesCostSplit = servicesCostSplit;
+            InsuredCost = ServicesCostSplit.Aggregate(Money.Euro(0), (sum, i) => sum + i.InsuredCost);
+            TuCost = ServicesCostSplit.Aggregate(Money.Euro(0), (sum, i) => sum + i.TuCost);
+            TotalCost = ServicesCostSplit.Aggregate(Money.Euro(0), (sum, i) => sum + i.TotalCost);
+            AmountLimitConsumption = ServicesCostSplit.Aggregate(Money.Euro(0), (sum, i) => sum + i.AmountLimitConsumption);
+            QtLimitConsumption = ServicesCostSplit.Aggregate(0, (sum, i) => sum + i.QtLimitConsumption);
+        }
     }
 
     public class CaseServiceCostSplitResult
     {
-        public Money InsuredCost { get; private set; }
-        public Money TuCost { get; private set; }
-        public Money TotalCost { get; private set; }
-        public Money AmountLimitConsumption { get; private set; }
+        public DateTime Date { get; set; }
+        public string ServiceCode { get; set; }
+        public Money Price { get; set; }
+        public Money InsuredCost { get; set; }
+        public Money TuCost { get; set; }
+        public Money TotalCost { get; set; }
+        public Money AmountLimitConsumption { get; set; }
         public int QtLimitConsumption { get; set; }
 
         public static CaseServiceCostSplitResult For(CaseServiceCostSplit caseService)
         {
             return new CaseServiceCostSplitResult
             {
+                Date = caseService.Date,
+                ServiceCode = caseService.ServiceCode,
+                Price = caseService.Price,
                 InsuredCost = caseService.InsuredCost,
                 TuCost = caseService.TuCost,
                 TotalCost = caseService.TotalCost,

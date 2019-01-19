@@ -28,7 +28,9 @@ namespace TpaOk
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .AddJsonOptions(JsonOptions)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddEf(Configuration);
             services.AddSingleton<CalculateCostSplitAndReserveLimitsHandler>();
         }
@@ -45,9 +47,15 @@ namespace TpaOk
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseMvc();
             app.UseEfInitializer();
+        }
+        
+        private void JsonOptions(MvcJsonOptions options)
+        {
+            options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+            options.SerializerSettings.Converters.Add(new NodaMoney.Serialization.JsonNet.MoneyJsonConverter());
+            options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
         }
     }
 }

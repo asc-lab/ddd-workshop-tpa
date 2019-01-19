@@ -18,6 +18,7 @@ namespace TpaOk.Domain.Limits
         public string ServiceCode => CaseService.ServiceCode;
         public decimal Qt => CaseService.Qt;
         public DateTime Date => CaseService.Date;
+        public Money Price => CaseService.Price;
 
 
         public CaseServiceCostSplit(Case @case, CaseService caseService)

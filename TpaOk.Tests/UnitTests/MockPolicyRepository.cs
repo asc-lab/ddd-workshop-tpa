@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using TpaOk.Domain.Limits;
 
-namespace TpaOk.Tests
+namespace TpaOk.Tests.UnitTests
 {
     public class MockPolicyRepository : IPolicyRepository
     {

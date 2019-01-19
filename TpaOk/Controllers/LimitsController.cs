@@ -19,7 +19,7 @@ namespace TpaOk.Controllers
         }
 
         // POST api/values
-        [HttpPost("/calculateAndReserveLimits")]
+        [HttpPost("calculateAndReserveLimits")]
         public IActionResult CalculateAndReserveLimits([FromBody] CalculateCostSplitAndReserveLimitsCommand cmd)
         {
             return new JsonResult(_costSplitAndReserveLimitsHandler.Handle(cmd));

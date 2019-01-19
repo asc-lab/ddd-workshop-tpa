@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using NodaMoney;
 using TpaOk.Commands;
-using TpaOk.Domain.Limits;
 using Xunit;
 
-namespace TpaOk.Tests
+namespace TpaOk.Tests.UnitTests
 {
     public class ServiceCoverageTests
     {   

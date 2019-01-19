@@ -10,12 +10,11 @@ namespace TpaOk.DataAccess
         
         public LimitsDbContext(DbContextOptions<LimitsDbContext> options) : base(options)
         {
-            
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PolicyVersion>(pv => { pv.HasKey(i => i.PolicyId); });
+            modelBuilder.Entity<PolicyVersion>(pv => { pv.HasKey(i => i.PolicyVersionId); });
             
             modelBuilder.Entity<CoveredService>(cs =>
             {

@@ -34,8 +34,14 @@ namespace TpaOk.DataAccess
                     consumptionsInPeriodQuery.Where(c => c.InsuredId == caseService.Case.InsuredId);
             }
                 
-            var sumAmt = consumptionsInPeriodQuery.Aggregate(Money.Euro(0), (sum, c) => sum + c.ConsumedAmount);
-            var sumQt = consumptionsInPeriodQuery.Aggregate(0, (sum, c) => sum + c.ConsumedQuantity);
+            //TODO: fix this so SUM is calculate at the db level not in memory
+            //had to do it this way cause InMemoEfDb does not know how to aggregate
+            var sumAmt = consumptionsInPeriodQuery
+                .ToList()
+                .Aggregate(Money.Euro(0), (sum, c) => sum + c.ConsumedAmount);
+            var sumQt = consumptionsInPeriodQuery
+                .ToList()
+                .Aggregate(0, (sum, c) => sum + c.ConsumedQuantity);
             
             return new LimitConsumptionContainer(sumAmt,sumQt);
         }

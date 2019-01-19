@@ -5,7 +5,7 @@ using TpaOk.Commands;
 using TpaOk.Domain.Limits;
 using Xunit;
 
-namespace TpaOk.Tests
+namespace TpaOk.Tests.UnitTests
 {
     public class LimitsTests
     {
