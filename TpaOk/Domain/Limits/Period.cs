@@ -4,8 +4,8 @@ namespace TpaOk.Domain.Limits
 {
     public class Period 
     {
-        public DateTime From { get; }
-        public DateTime To { get; }
+        public DateTime From { get; private set; }
+        public DateTime To { get; private set;}
 
         public Period(DateTime @from, DateTime to)
         {

@@ -8,15 +8,15 @@ namespace TpaOk.Commands
 {
     public class CalculateCostSplitAndReserveLimitsHandler
     {
-        private readonly IPolicyRepository _policyRepository;
-        private readonly ILimitConsumptionsRepository _limitConsumptionsRepositoryRepository;
+        private readonly IPolicyRepository _policies;
+        private readonly ILimitConsumptionContainerRepository _limitConsumptionContainers;
         private readonly CostSplitPoliciesFactory _costSplitPoliciesFactory;
 
-        public CalculateCostSplitAndReserveLimitsHandler(IPolicyRepository policyRepository, ILimitConsumptionsRepository limitConsumptionsRepositoryRepository)
+        public CalculateCostSplitAndReserveLimitsHandler(IPolicyRepository policies, ILimitConsumptionContainerRepository limitConsumptionContainers)
         {
-            _policyRepository = policyRepository;
-            _limitConsumptionsRepositoryRepository = limitConsumptionsRepositoryRepository;
-            _costSplitPoliciesFactory = new CostSplitPoliciesFactory(_policyRepository, _limitConsumptionsRepositoryRepository);
+            _policies = policies;
+            _limitConsumptionContainers = limitConsumptionContainers;
+            _costSplitPoliciesFactory = new CostSplitPoliciesFactory(_policies, _limitConsumptionContainers);
         }
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
@@ -34,15 +34,17 @@ namespace TpaOk.Commands
 
             foreach (var caseService in costSplitServices)
             {
-                var costSplitPolicies = _costSplitPoliciesFactory.CreatePoliciesFor
+                var limitPolicies = _costSplitPoliciesFactory.CreatePoliciesFor
                 (
                     caseService.PolicyId,
                     caseService.Date
                 );
 
-                var consumptions = caseService.SplitCost(costSplitPolicies);
+                caseService.ApplyCoverageCheck(limitPolicies.CoverageCheckPolicy);
                 
-                SaveConsumptions(consumptions);
+                caseService.ApplyCoPayment(limitPolicies.CoPaymentPolicy);
+
+                caseService.ApplyLimit(limitPolicies.LimitsPolicy);
             }
 
             return costSplitServices;
@@ -56,17 +58,10 @@ namespace TpaOk.Commands
                 .ToList();
         }
 
-        private void SaveConsumptions(List<Consumption> consumptions)
-        {
-            if (consumptions.Count > 0)
-            {
-                _limitConsumptionsRepositoryRepository.Add(consumptions);
-            }
-        }
 
         private void ClearPreviousConsumptionForCase(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
-            _limitConsumptionsRepositoryRepository.RemoveForCase(cmd.Case.Number);
+            //_limitConsumptionContainers.RemoveForCase(cmd.Case.Number);
         }
     }
 

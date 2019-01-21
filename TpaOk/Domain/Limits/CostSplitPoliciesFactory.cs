@@ -6,12 +6,12 @@ namespace TpaOk.Domain.Limits
     public class CostSplitPoliciesFactory
     {
         private readonly IPolicyRepository _policyRepository;
-        private readonly ILimitConsumptionsRepository _limitConsumptionsRepositoryRepository;
+        private readonly ILimitConsumptionContainerRepository _limitConsumptionContainerRepositoryRepository;
 
-        public CostSplitPoliciesFactory(IPolicyRepository policyRepository, ILimitConsumptionsRepository limitConsumptionsRepositoryRepository)
+        public CostSplitPoliciesFactory(IPolicyRepository policyRepository, ILimitConsumptionContainerRepository limitConsumptionContainerRepositoryRepository)
         {
             _policyRepository = policyRepository;
-            _limitConsumptionsRepositoryRepository = limitConsumptionsRepositoryRepository;
+            _limitConsumptionContainerRepositoryRepository = limitConsumptionContainerRepositoryRepository;
         }
 
         public CostSplitPolicies CreatePoliciesFor(int policyId, DateTime serviceDate)
@@ -21,22 +21,22 @@ namespace TpaOk.Domain.Limits
                     
             return new CostSplitPolicies
             (
-                new ServiceCoveredPolicy(policyVersionAtServiceDate),
+                new CoverageCheckPolicy(policyVersionAtServiceDate),
                 new CoPaymentPolicy(policyVersionAtServiceDate),
-                new LimitsPolicy(policyVersionAtServiceDate, _limitConsumptionsRepositoryRepository)
+                new LimitsPolicy(policyVersionAtServiceDate, _limitConsumptionContainerRepositoryRepository)
             );
         }
     }
 
     public class CostSplitPolicies
     {
-        public ServiceCoveredPolicy ServiceCoveredPolicy { get; }
+        public CoverageCheckPolicy CoverageCheckPolicy { get; }
         public CoPaymentPolicy CoPaymentPolicy { get; }
         public LimitsPolicy LimitsPolicy { get; }
 
-        public CostSplitPolicies(ServiceCoveredPolicy serviceCoveredPolicy, CoPaymentPolicy coPaymentPolicy, LimitsPolicy limitsPolicy)
+        public CostSplitPolicies(CoverageCheckPolicy coverageCheckPolicy, CoPaymentPolicy coPaymentPolicy, LimitsPolicy limitsPolicy)
         {
-            ServiceCoveredPolicy = serviceCoveredPolicy;
+            CoverageCheckPolicy = coverageCheckPolicy;
             CoPaymentPolicy = coPaymentPolicy;
             LimitsPolicy = limitsPolicy;
         }

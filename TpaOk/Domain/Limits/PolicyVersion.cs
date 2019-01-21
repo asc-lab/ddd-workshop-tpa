@@ -112,7 +112,7 @@ namespace TpaOk.Domain.Limits
         public bool Shared { get; private set; }
         
         public abstract LimitCalculation Calculate(CaseServiceCostSplit costSplit,
-            LimitConsumptionContainer currentLimitConsumptionContainer);
+            (Money,int) currentLimitConsumptionContainer);
 
         protected Limit()
         {
@@ -141,7 +141,7 @@ namespace TpaOk.Domain.Limits
         }
 
         public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
-            LimitConsumptionContainer currentLimitConsumptionContainer)
+            (Money,int) currentLimitConsumptionContainer)
         {
             
             throw new NotImplementedException();
@@ -162,9 +162,9 @@ namespace TpaOk.Domain.Limits
         }
 
         public override LimitCalculation Calculate(CaseServiceCostSplit costSplit,
-            LimitConsumptionContainer currentLimitConsumptionContainer)
+            (Money,int) currentLimitConsumptionContainer)
         {
-            var currentMax = Amount - currentLimitConsumptionContainer.ConsumedAmount;
+            var currentMax = Amount - currentLimitConsumptionContainer.Item1;
             if (currentMax < Money.Euro(0))
             {
                 currentMax = Money.Euro(0);

@@ -14,7 +14,8 @@ namespace TpaOk.DataAccess
                 opts.UseInMemoryDatabase("InsuranceDb");
             });
             
-            services.AddScoped<ILimitConsumptionsRepository, EfLimitConsumptionsRepository>();
+            services.AddScoped<IDataStore, EfDataStore>();
+            services.AddScoped<ILimitConsumptionContainerRepository, EfLimitConsumptionContainerRepository>();
             services.AddScoped<IPolicyRepository, EfPolicyRepository>();
 
             return services;

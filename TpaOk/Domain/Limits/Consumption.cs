@@ -7,26 +7,33 @@ namespace TpaOk.Domain.Limits
     public class Consumption
     {
         public int ConsumptionId { get; private set; }
-        public int PolicyId { get; private set; }
-        public int InsuredId { get; private set; }
+        public LimitConsumptionContainer ConsumptionContainer { get; private set; }
         public string CaseNumber { get; private set; }
-        public string ServiceCode { get; private set; }
+        public Guid ServiceId { get; private set; }
         public DateTime ConsumptionDate { get; private set; }
         public Money ConsumedAmount { get; private set; }
         public int ConsumedQuantity { get; private set; }
-        
-        
-        public Consumption(CaseServiceCostSplit caseService)
-            : this(caseService.PolicyId, caseService.InsuredId, caseService.CaseNumber, caseService.ServiceCode, caseService.Date,
-                caseService.AmountLimitConsumption, caseService.QtLimitConsumption)
-        {}
 
-        public Consumption(int policyId, int insuredId, string caseNumber, string serviceCode, DateTime consumptionDate, Money consumedAmount, int consumedQuantity)
+        //required by EF
+        protected Consumption()
         {
-            PolicyId = policyId;
-            InsuredId = insuredId;
+        }
+
+        public Consumption(LimitConsumptionContainer consumptionContainer , CaseServiceCostSplit caseService)
+        {
+            ConsumptionContainer = consumptionContainer;
+            ServiceId = caseService.CaseServiceId;
+            CaseNumber = caseService.CaseNumber;
+            ConsumptionDate = caseService.Date;
+            ConsumedAmount = caseService.AmountLimitConsumption;
+            ConsumedQuantity = caseService.QtLimitConsumption;
+        }
+
+        public Consumption(LimitConsumptionContainer consumptionContainer, string caseNumber, Guid serviceId, DateTime consumptionDate, Money consumedAmount, int consumedQuantity)
+        {
+            ConsumptionContainer = consumptionContainer;
             CaseNumber = caseNumber;
-            ServiceCode = serviceCode;
+            ServiceId = serviceId;
             ConsumptionDate = consumptionDate;
             ConsumedAmount = consumedAmount;
             ConsumedQuantity = consumedQuantity;

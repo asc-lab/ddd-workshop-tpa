@@ -7,6 +7,8 @@ namespace TpaOk.Domain.Limits
 {
     public class CaseServiceCostSplit
     {
+        public Guid CaseServiceId { get; private set; }
+        
         public Money InsuredCost { get; private set; }
         public Money TuCost { get; private set; }
         public Money AmountLimitConsumption { get; private set; }
@@ -24,6 +26,8 @@ namespace TpaOk.Domain.Limits
 
         public CaseServiceCostSplit(Case @case, CaseService caseService)
         {
+            CaseServiceId = caseService.ServiceId;
+            
             InsuredCost = Money.Euro(0);
             TuCost = caseService.Cost;
             AmountLimitConsumption = Money.Euro(0);
@@ -38,41 +42,22 @@ namespace TpaOk.Domain.Limits
             CaseNumber = @case.Number;
             InsuredId = @case.InsuredId;
         }
-
-        public List<Consumption> SplitCost(CostSplitPolicies costSplitPolicies)
-        {
-            var consumptions = new List<Consumption>();
-            
-            var coverageCheckApplicationResult = costSplitPolicies.ServiceCoveredPolicy.Apply(this);
-            Apply(coverageCheckApplicationResult);
-            
-            
-            var coPaymentApplicationResult = costSplitPolicies.CoPaymentPolicy.Apply(this);
-            Apply(coPaymentApplicationResult);
-
-            var limitApplicationResult = costSplitPolicies.LimitsPolicy.Apply(this);
-            Apply(limitApplicationResult);
-
-            if (limitApplicationResult.IsApplied)
-            {
-                consumptions.Add(new Consumption(this));
-            }
-
-            return consumptions;
-        }
         
-        //private
-        private void Apply(CoverageCheckResult serviceCoveredPolicyResult)
+        public void ApplyCoverageCheck(CoverageCheckPolicy coverageCheckPolicy)
         {
-            if (!serviceCoveredPolicyResult.IsCovered)
+            var coverageCheckResult = coverageCheckPolicy.Apply(this);
+            
+            if (!coverageCheckResult.IsCovered)
             {
-                TuCost -= serviceCoveredPolicyResult.NotCoveredAmount;
-                InsuredCost += serviceCoveredPolicyResult.NotCoveredAmount;
+                TuCost -= coverageCheckResult.NotCoveredAmount;
+                InsuredCost += coverageCheckResult.NotCoveredAmount;
             }
         }
 
-        private void Apply(CoPaymentApplicationResult coPaymentResult)
+
+        public void ApplyCoPayment(CoPaymentPolicy coPaymentPolicy)
         {
+            var coPaymentResult = coPaymentPolicy.Apply(this);
             if (InsuredCost != TotalCost && coPaymentResult.NotCoveredAmount > Money.Euro(0))
             {
                 InsuredCost += coPaymentResult.NotCoveredAmount;
@@ -80,40 +65,17 @@ namespace TpaOk.Domain.Limits
             }
         }
 
-        private void Apply(LimitsApplicationResult limitsApplicationResult)
+        public void ApplyLimit(LimitsPolicy limitPolicy)
         {
-            if (InsuredCost != TotalCost && limitsApplicationResult.IsApplied)
+            var limitApplicationResult = limitPolicy.Apply(this);
+            if (InsuredCost != TotalCost && limitApplicationResult.IsApplied)
             {
-                InsuredCost += limitsApplicationResult.NotCoveredAmount;
-                TuCost -= limitsApplicationResult.NotCoveredAmount;
-                AmountLimitConsumption += limitsApplicationResult.LimitConsumption;
+                InsuredCost += limitApplicationResult.NotCoveredAmount;
+                TuCost -= limitApplicationResult.NotCoveredAmount;
+                AmountLimitConsumption += limitApplicationResult.LimitConsumption;
             }
         }
     }
 
-    public class InitialCostSplit
-    {
-        
-    }
-
-
-    public class CostSplitAfterCoverageCheck
-    {
-        
-    }
-
-    public class CostSplitAfterCoPayment
-    {
-        
-    }
-
-    public class CostSplitAfterLimit
-    {
-        
-    }
-
-    class CostSplitAndConsumptions
-    {
-        
-    }
+    
 }

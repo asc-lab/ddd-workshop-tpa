@@ -28,6 +28,7 @@ namespace TpaOk.Commands
     
     public class CaseService
     {
+        public Guid ServiceId { get; set; }
         public DateTime Date { get; set; }
         public string ServiceCode { get; set; }
         public Money Price { get; set; }

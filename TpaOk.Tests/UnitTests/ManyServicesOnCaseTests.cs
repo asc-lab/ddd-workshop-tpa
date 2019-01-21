@@ -9,13 +9,13 @@ namespace TpaOk.Tests.UnitTests
 {
     public class ManyServicesOnCaseTests
     {
-        private ILimitConsumptionsRepository limitConsumptionsRepository;
+        private ILimitConsumptionContainerRepository _limitConsumptionContainerRepository;
         private CalculateCostSplitAndReserveLimitsHandler cmdHandler;
 
         public ManyServicesOnCaseTests()
         {
-            limitConsumptionsRepository = new MockLimitConsumptionRepository();
-            cmdHandler = new CalculateCostSplitAndReserveLimitsHandler(new MockPolicyRepository(), limitConsumptionsRepository);
+            _limitConsumptionContainerRepository = new MockLimitConsumptionContainerRepository();
+            cmdHandler = new CalculateCostSplitAndReserveLimitsHandler(new MockPolicyRepository(), _limitConsumptionContainerRepository);
         }
 
         [Fact]
@@ -90,7 +90,12 @@ namespace TpaOk.Tests.UnitTests
             };
             
             //and
-            limitConsumptionsRepository.Add(new Consumption(9,1,"CASE8777","KONS_INTERNISTA",new DateTime(2019,1,9),Money.Euro(950),0));
+            var container = new IndividualInsuredConsumptionContainerForService
+            (
+                9,"KONS_INTERNISTA",1,Period.Between(new DateTime(2019,1,1), new DateTime(2019,12,31))
+            );
+            container.ReserveLimitsFor("CASE8777", Guid.NewGuid(), new DateTime(2019, 1, 9), Money.Euro(950), 0);
+            _limitConsumptionContainerRepository.Add(container);
 
             //when
             var result = cmdHandler.Handle(new CalculateCostSplitAndReserveLimitsCommand(medCase));
@@ -108,4 +113,5 @@ namespace TpaOk.Tests.UnitTests
         }
         
     }
+    
 }

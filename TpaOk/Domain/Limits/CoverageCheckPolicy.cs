@@ -3,11 +3,11 @@ using TpaOk.Commands;
 
 namespace TpaOk.Domain.Limits
 {
-    public class ServiceCoveredPolicy
+    public class CoverageCheckPolicy
     {
         private readonly PolicyVersion policyAtServiceDate;
 
-        public ServiceCoveredPolicy(PolicyVersion policyAtServiceDate)
+        public CoverageCheckPolicy(PolicyVersion policyAtServiceDate)
         {
             this.policyAtServiceDate = policyAtServiceDate;
         }
