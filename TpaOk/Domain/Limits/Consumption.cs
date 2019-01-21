@@ -16,9 +16,9 @@ namespace TpaOk.Domain.Limits
         public int ConsumedQuantity { get; private set; }
         
         
-        public Consumption(Case cmdCase, CaseService caseService, Money amountConsumed, int qtConsumed)
-            : this(cmdCase.PolicyId, cmdCase.InsuredId, cmdCase.Number, caseService.ServiceCode, caseService.Date,
-                amountConsumed, qtConsumed)
+        public Consumption(CaseServiceCostSplit caseService)
+            : this(caseService.PolicyId, caseService.InsuredId, caseService.CaseNumber, caseService.ServiceCode, caseService.Date,
+                caseService.AmountLimitConsumption, caseService.QtLimitConsumption)
         {}
 
         public Consumption(int policyId, int insuredId, string caseNumber, string serviceCode, DateTime consumptionDate, Money consumedAmount, int consumedQuantity)

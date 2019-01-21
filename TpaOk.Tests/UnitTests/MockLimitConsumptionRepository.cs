@@ -12,20 +12,20 @@ namespace TpaOk.Tests.UnitTests
         public LimitConsumptionContainer GetLimitConsumption(CaseServiceCostSplit caseService, Limit limit, Period period)
         {
             var consumptionsInPeriodQuery = _consumptions
-                .Where(c => c.PolicyId == caseService.Case.PolicyId)
+                .Where(c => c.PolicyId == caseService.PolicyId)
                 .Where( c => c.ServiceCode == caseService.ServiceCode)
                 .Where(c => period.Contains(c.ConsumptionDate));
 
             if (limit.LimitPeriod is PerCaseLimitPeriod)
             {
                 consumptionsInPeriodQuery =
-                    consumptionsInPeriodQuery.Where(c => c.CaseNumber == caseService.Case.Number);
+                    consumptionsInPeriodQuery.Where(c => c.CaseNumber == caseService.CaseNumber);
             }
 
             if (!limit.Shared)
             {
                 consumptionsInPeriodQuery =
-                    consumptionsInPeriodQuery.Where(c => c.InsuredId == caseService.Case.InsuredId);
+                    consumptionsInPeriodQuery.Where(c => c.InsuredId == caseService.InsuredId);
             }
                 
             var sumAmt = consumptionsInPeriodQuery.Aggregate(Money.Euro(0), (sum, c) => sum + c.ConsumedAmount);

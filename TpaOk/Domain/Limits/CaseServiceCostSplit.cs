@@ -7,30 +7,36 @@ namespace TpaOk.Domain.Limits
 {
     public class CaseServiceCostSplit
     {
-        public Case Case { get; } //TODO: make it private?
-        public CaseService CaseService { get; } //TODO: make it private?
-        
         public Money InsuredCost { get; private set; }
         public Money TuCost { get; private set; }
-        public Money TotalCost { get; private set; }
         public Money AmountLimitConsumption { get; private set; }
-        public int QtLimitConsumption { get; set; }
-        public string ServiceCode => CaseService.ServiceCode;
-        public decimal Qt => CaseService.Qt;
-        public DateTime Date => CaseService.Date;
-        public Money Price => CaseService.Price;
-
+        public int QtLimitConsumption { get; private set; }
+        public Money TotalCost => Price * Qt;
+        
+        public string ServiceCode { get; private set; }
+        public decimal Qt { get; private set; }
+        public DateTime Date { get; private set; }
+        public Money Price { get; private set; }
+        
+        public int PolicyId { get; private set; }
+        public string CaseNumber { get; private set; }
+        public int InsuredId { get; private set; }
 
         public CaseServiceCostSplit(Case @case, CaseService caseService)
         {
-            Case = @case;
-            CaseService = caseService;
-
             InsuredCost = Money.Euro(0);
             TuCost = caseService.Cost;
-            TotalCost = caseService.Cost;
             AmountLimitConsumption = Money.Euro(0);
             QtLimitConsumption = 0;
+            
+            ServiceCode = caseService.ServiceCode;
+            Qt = caseService.Qt;
+            Date = caseService.Date;
+            Price = caseService.Price;
+
+            PolicyId = @case.PolicyId;
+            CaseNumber = @case.Number;
+            InsuredId = @case.InsuredId;
         }
 
         public List<Consumption> SplitCost(CostSplitPolicies costSplitPolicies)
@@ -49,7 +55,7 @@ namespace TpaOk.Domain.Limits
 
             if (limitApplicationResult.IsApplied)
             {
-                consumptions.Add(new Consumption(Case, CaseService, AmountLimitConsumption, QtLimitConsumption));
+                consumptions.Add(new Consumption(this));
             }
 
             return consumptions;

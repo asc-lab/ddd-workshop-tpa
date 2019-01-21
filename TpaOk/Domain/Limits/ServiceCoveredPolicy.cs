@@ -19,7 +19,7 @@ namespace TpaOk.Domain.Limits
                 return CoverageCheckResult.NotCovered(NotCoveredReason.NoPolicyAtServiceDate, caseService);
             }
 
-            if (!policyAtServiceDate.CoversInsured(caseService.Case.InsuredId))
+            if (!policyAtServiceDate.CoversInsured(caseService.InsuredId))
             {
                 return CoverageCheckResult.NotCovered(NotCoveredReason.InsuredNotFoundOnPolicy, caseService);
             }

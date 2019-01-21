@@ -36,7 +36,7 @@ namespace TpaOk.Commands
             {
                 var costSplitPolicies = _costSplitPoliciesFactory.CreatePoliciesFor
                 (
-                    caseService.Case.PolicyId,
+                    caseService.PolicyId,
                     caseService.Date
                 );
 
