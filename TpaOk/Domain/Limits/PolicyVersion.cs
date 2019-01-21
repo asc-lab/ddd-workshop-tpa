@@ -34,6 +34,11 @@ namespace TpaOk.Domain.Limits
         {
             return CoveredServices.FirstOrDefault(cs => cs.ServiceCode == serviceCode)?.Limit;
         }
+
+        public bool CoversDate(DateTime theDate)
+        {
+            return Period.Between(PolicyFrom, PolicyTo).Contains(theDate);
+        }
     }
 
     public class CoveredService
@@ -59,13 +64,29 @@ namespace TpaOk.Domain.Limits
     {
         public override Period Calculate(DateTime caseServiceDate, PolicyVersion policyVersion)
         {
-            //TODO: handle leap year
-            return Period.Between
+            if (!policyVersion.CoversDate(caseServiceDate))
+            {
+                return Period.Forever();
+            }
+            
+            var period = Period.Between
             (
-                new DateTime(caseServiceDate.Year, policyVersion.PolicyFrom.Month, policyVersion.PolicyFrom.Day),
-                new DateTime(caseServiceDate.Year, policyVersion.PolicyTo.Month, policyVersion.PolicyTo.Day)
+                policyVersion.PolicyFrom,
+                policyVersion.PolicyFrom.AddYears(1).AddDays(-1)
             );
+            
+            while (!period.Contains(caseServiceDate))
+            {
+                period = Period.Between
+                (
+                    period.From.AddYears(1),
+                    period.From.AddYears(2).AddDays(-1)
+                );
+            }
+
+            return period;
         }
+
     }
     
     public class CalendarYearLimitPeriod : LimitPeriod

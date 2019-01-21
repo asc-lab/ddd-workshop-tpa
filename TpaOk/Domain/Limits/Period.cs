@@ -2,7 +2,7 @@ using System;
 
 namespace TpaOk.Domain.Limits
 {
-    public class Period
+    public class Period 
     {
         public DateTime From { get; }
         public DateTime To { get; }
@@ -37,6 +37,27 @@ namespace TpaOk.Domain.Limits
                 return false;
             
             return true;
+        }
+
+        protected bool Equals(Period other)
+        {
+            return From.Equals(other.From) && To.Equals(other.To);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Period) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (From.GetHashCode() * 397) ^ To.GetHashCode();
+            }
         }
     }
 }
