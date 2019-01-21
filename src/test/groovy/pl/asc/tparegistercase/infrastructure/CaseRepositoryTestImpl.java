@@ -2,6 +2,8 @@ package pl.asc.tparegistercase.infrastructure;
 
 import pl.asc.tparegistercase.domain.Case;
 import pl.asc.tparegistercase.domain.CaseRepository;
+import pl.asc.tparegistercase.domain.CostReportService;
+import pl.asc.tparegistercase.domain.MSPPriceService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,9 +23,13 @@ public class CaseRepositoryTestImpl implements CaseRepository {
     }
 
     @Override
-    public Case findByCaseNumber(String caseNumber) {
+    public Case findByCaseNumber(String caseNumber, CostReportService costReportService, MSPPriceService mspPriceService) {
         return cases.stream()
                 .filter(e -> e.getCaseNumber().equals(caseNumber))
+                .peek(aCase -> {
+                    aCase.setCostReportService(costReportService);
+                    aCase.setMspPriceService(mspPriceService);
+                })
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Case not found."));
     }

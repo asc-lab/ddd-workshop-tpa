@@ -4,5 +4,5 @@ public interface CaseRepository {
 
     Case save(Case registeredCase);
 
-    Case findByCaseNumber(String caseNumber);
+    Case findByCaseNumber(String caseNumber, CostReportService costReportService, MSPPriceService mspPriceService);
 }

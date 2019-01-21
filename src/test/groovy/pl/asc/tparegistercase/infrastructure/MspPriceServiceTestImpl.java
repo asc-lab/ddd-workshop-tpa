@@ -7,6 +7,7 @@ import pl.asc.tparegistercase.domain.vo.ServiceInCasePrice;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MspPriceServiceTestImpl implements MSPPriceService {
 
@@ -14,16 +15,17 @@ public class MspPriceServiceTestImpl implements MSPPriceService {
 
     static {
         pricing.add(new ServiceInCasePrice("LUXMED_JEROZOLIMSKIE", "INTERNISTA", Monetary.of("PLN", BigDecimal.TEN)));
-        pricing.add(new ServiceInCasePrice("LUXMED_JEROZOLIMSKIE", "DENTYSTA", Monetary.of("PLN", BigDecimal.ONE)));
+        pricing.add(new ServiceInCasePrice("LUXMED_JEROZOLIMSKIE", "DENTYSTA", Monetary.of("PLN", BigDecimal.TEN)));
         pricing.add(new ServiceInCasePrice("MEDI_KRAKOW", "INTERNISTA", Monetary.of("PLN", BigDecimal.TEN)));
+        pricing.add(new ServiceInCasePrice("MEDI_KRAKOW", "DENTYSTA", Monetary.of("PLN", BigDecimal.TEN)));
     }
 
     @Override
-    public ServiceInCasePrice findByFacilityAndService(String facilityCode, String serviceCode) {
+    public Optional<ServiceInCasePrice> findByFacilityAndService(String facilityCode, String serviceCode) {
         return pricing.stream()
                 .filter(p -> p.getFacilityCode().equals(facilityCode))
                 .filter(p -> p.getServiceCode().equals(serviceCode))
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
 }

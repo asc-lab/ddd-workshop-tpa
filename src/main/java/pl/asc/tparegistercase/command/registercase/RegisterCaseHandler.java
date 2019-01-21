@@ -7,7 +7,7 @@ import pl.asc.tparegistercase.domain.CaseFactory;
 import pl.asc.tparegistercase.domain.CaseRepository;
 
 @RequiredArgsConstructor
-public class RegisterCaseCommandHandler implements CommandHandler<RegisterCaseResult, RegisterCaseCommand> {
+public class RegisterCaseHandler implements CommandHandler<RegisterCaseResult, RegisterCaseCommand> {
 
     final CaseRepository repository;
 

@@ -1,10 +1,10 @@
-package pl.asc.tparegistercase.command.acceptcase;
+package pl.asc.tparegistercase.command.finishcaseregistration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class EndRegistrationCommandResult {
+public class FinishCaseRegistrationResult {
     private boolean success;
 }

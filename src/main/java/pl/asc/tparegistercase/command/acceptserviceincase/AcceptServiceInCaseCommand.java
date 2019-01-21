@@ -1,4 +1,4 @@
-package pl.asc.tparegistercase.command.addservice;
+package pl.asc.tparegistercase.command.acceptserviceincase;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddServiceInCaseCommand implements Command<AddServiceInCaseResult> {
+public class AcceptServiceInCaseCommand implements Command<AcceptServiceInCaseResult> {
     private String caseNumber;
     private String serviceCode;
     private Integer serviceQuantity;

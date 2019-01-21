@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
-class ServiceInCase {
+public class ServiceInCase {
 
     private Integer order;
     private String serviceCode;
@@ -16,5 +16,9 @@ class ServiceInCase {
     private String facilityCode;
     private LocalDateTime visitDate;
     private Monetary price;
+
+    void reNumber(int order) {
+        this.order = order;
+    }
 
 }
