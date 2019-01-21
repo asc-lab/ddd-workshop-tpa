@@ -34,17 +34,15 @@ namespace TpaOk.Commands
 
             foreach (var caseService in costSplitServices)
             {
-                var limitPolicies = _costSplitPoliciesFactory.CreatePoliciesFor
+                var costSplitPolicies = _costSplitPoliciesFactory.CreatePoliciesFor
                 (
                     caseService.PolicyId,
                     caseService.Date
                 );
 
-                caseService.ApplyCoverageCheck(limitPolicies.CoverageCheckPolicy);
-                
-                caseService.ApplyCoPayment(limitPolicies.CoPaymentPolicy);
 
-                caseService.ApplyLimit(limitPolicies.LimitsPolicy);
+                caseService.SplitCost(costSplitPolicies);
+
             }
 
             return costSplitServices;

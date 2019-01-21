@@ -43,7 +43,17 @@ namespace TpaOk.Domain.Limits
             InsuredId = @case.InsuredId;
         }
         
-        public void ApplyCoverageCheck(CoverageCheckPolicy coverageCheckPolicy)
+        
+        public void SplitCost(CostSplitPolicies costSplitPolicies)
+        {
+            ApplyCoverageCheck(costSplitPolicies.CoverageCheckPolicy);
+                
+            ApplyCoPayment(costSplitPolicies.CoPaymentPolicy);
+
+            ApplyLimit(costSplitPolicies.LimitsPolicy);
+        }
+        
+        private void ApplyCoverageCheck(CoverageCheckPolicy coverageCheckPolicy)
         {
             var coverageCheckResult = coverageCheckPolicy.Apply(this);
             
@@ -55,7 +65,7 @@ namespace TpaOk.Domain.Limits
         }
 
 
-        public void ApplyCoPayment(CoPaymentPolicy coPaymentPolicy)
+        private void ApplyCoPayment(CoPaymentPolicy coPaymentPolicy)
         {
             var coPaymentResult = coPaymentPolicy.Apply(this);
             if (InsuredCost != TotalCost && coPaymentResult.NotCoveredAmount > Money.Euro(0))
@@ -65,7 +75,7 @@ namespace TpaOk.Domain.Limits
             }
         }
 
-        public void ApplyLimit(LimitsPolicy limitPolicy)
+        private void ApplyLimit(LimitsPolicy limitPolicy)
         {
             var limitApplicationResult = limitPolicy.Apply(this);
             if (InsuredCost != TotalCost && limitApplicationResult.IsApplied)
@@ -75,6 +85,7 @@ namespace TpaOk.Domain.Limits
                 AmountLimitConsumption += limitApplicationResult.LimitConsumption;
             }
         }
+
     }
 
     
