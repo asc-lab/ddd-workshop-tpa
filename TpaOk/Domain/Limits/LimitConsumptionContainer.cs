@@ -7,12 +7,6 @@ using NodaMoney;
 
 namespace TpaOk.Domain.Limits
 {
-    /// <summary>
-    /// TODO: make it an aggregate root and let consumptions being added to it
-    /// we may need several kinds of it
-    /// SharedConsumptionContainer and IndInsuredConsumptionContainer?
-    /// Freeing limits must somehow also increase version of a container?
-    /// </summary>
     public class LimitConsumptionContainer
     {
         public Guid Id { get; private set; }
