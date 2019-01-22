@@ -9,13 +9,13 @@ namespace TpaOk.Tests.UnitTests
 {
     public class ManyServicesOnCaseTests
     {
-        private ILimitConsumptionContainerRepository _limitConsumptionContainerRepository;
+        private IDataStore dataStore;
         private CalculateCostSplitAndReserveLimitsHandler cmdHandler;
 
         public ManyServicesOnCaseTests()
         {
-            _limitConsumptionContainerRepository = new MockLimitConsumptionContainerRepository();
-            cmdHandler = new CalculateCostSplitAndReserveLimitsHandler(new MockPolicyRepository(), _limitConsumptionContainerRepository);
+            dataStore = new MockDataStore();
+            cmdHandler = new CalculateCostSplitAndReserveLimitsHandler(dataStore);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace TpaOk.Tests.UnitTests
                 9,"KONS_INTERNISTA",1,Period.Between(new DateTime(2019,1,1), new DateTime(2019,12,31))
             );
             container.ReserveLimitsFor("CASE8777", Guid.NewGuid(), new DateTime(2019, 1, 9), Money.Euro(950), 0);
-            _limitConsumptionContainerRepository.Add(container);
+            dataStore.LimitConsumptionContainers.Add(container);
 
             //when
             var result = cmdHandler.Handle(new CalculateCostSplitAndReserveLimitsCommand(medCase));

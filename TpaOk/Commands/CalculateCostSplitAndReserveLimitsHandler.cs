@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using NodaMoney;
 using TpaOk.Domain.Limits;
 
@@ -8,24 +9,27 @@ namespace TpaOk.Commands
 {
     public class CalculateCostSplitAndReserveLimitsHandler
     {
-        private readonly IPolicyRepository _policies;
-        private readonly ILimitConsumptionContainerRepository _limitConsumptionContainers;
+        private readonly IDataStore _dataStore;
         private readonly CostSplitPoliciesFactory _costSplitPoliciesFactory;
 
-        public CalculateCostSplitAndReserveLimitsHandler(IPolicyRepository policies, ILimitConsumptionContainerRepository limitConsumptionContainers)
+        public CalculateCostSplitAndReserveLimitsHandler(IDataStore dataStore)
         {
-            _policies = policies;
-            _limitConsumptionContainers = limitConsumptionContainers;
-            _costSplitPoliciesFactory = new CostSplitPoliciesFactory(_policies, _limitConsumptionContainers);
+            _dataStore = dataStore;
+            _costSplitPoliciesFactory = new CostSplitPoliciesFactory(_dataStore.Policies, _dataStore.LimitConsumptionContainers);
         }
 
         public CalculateCostSplitAndReserveLimitsResult Handle(CalculateCostSplitAndReserveLimitsCommand cmd)
         {
-            ClearPreviousConsumptionForCase(cmd);
-            
-            var costSplitServices = SplitCostForServices(cmd);
+            using (var tx = new TransactionScope())
+            {
+                ClearPreviousConsumptionForCase(cmd);
 
-            return CalculateCostSplitAndReserveLimitsResult.For(costSplitServices);
+                var costSplitServices = SplitCostForServices(cmd);
+
+                tx.Complete();
+                
+                return CalculateCostSplitAndReserveLimitsResult.For(costSplitServices);
+            }
         }
 
         private List<CaseServiceCostSplit> SplitCostForServices(CalculateCostSplitAndReserveLimitsCommand cmd)
@@ -42,7 +46,8 @@ namespace TpaOk.Commands
 
 
                 caseService.SplitCost(costSplitPolicies);
-
+                
+                _dataStore.CommitChanges();
             }
 
             return costSplitServices;
