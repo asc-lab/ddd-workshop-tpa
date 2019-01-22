@@ -40,9 +40,9 @@ namespace TpaOk.Domain.Limits
             Consumptions = new List<Consumption>();
         }
 
-        public void ReserveLimitsFor(CaseServiceCostSplit caseService)
+        public void ReserveLimitsFor(CaseServiceCostSplit caseService, Money amountConsumption, int qtConsumption)
         {
-            Consumptions.Add(new Consumption(this, caseService));
+            ReserveLimitsFor(caseService.CaseNumber, caseService.CaseServiceId, caseService.Date, amountConsumption, qtConsumption);
         }
         
         public void ReserveLimitsFor(string caseNumber, Guid serviceId, DateTime consumptionDate, Money consumedAmount, int consumedQuantity)

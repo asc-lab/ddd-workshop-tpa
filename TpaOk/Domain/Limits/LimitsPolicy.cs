@@ -42,7 +42,7 @@ namespace TpaOk.Domain.Limits
                 limitConsumptionContainer.CurrentConsumption()
             );
             
-            limitConsumptionContainer.ReserveLimitsFor(caseService);
+            limitConsumptionContainer.ReserveLimitsFor(caseService, limitCalculation.LimitConsumption, 0);
             
             return LimitsApplicationResult.Applied(limitCalculation);
         }

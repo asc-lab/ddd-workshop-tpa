@@ -79,18 +79,21 @@ namespace TpaOk.Tests.IntegrationTests
                 };
                 
                 // when
-                var httpResult = await system.Scenario(_ =>
+                var httpResultCalcOne = await system.Scenario(_ =>
                 {
                     _.Post
                         .Json(new CalculateCostSplitAndReserveLimitsCommand(medCase))
                         .ToUrl("/api/Limits/calculateAndReserveLimits");
-                    
+                });
+                
+                var httpResultCalcTwo = await system.Scenario(_ =>
+                {
                     _.Post
                         .Json(new CalculateCostSplitAndReserveLimitsCommand(medCase))
                         .ToUrl("/api/Limits/calculateAndReserveLimits");
                 });
 
-                var costSplitResult = httpResult.ResponseBody.ReadAsJson<CalculateCostSplitAndReserveLimitsResult>();
+                var costSplitResult = httpResultCalcTwo.ResponseBody.ReadAsJson<CalculateCostSplitAndReserveLimitsResult>();
                 
                 // then
                 Assert.NotNull(costSplitResult);     
@@ -137,32 +140,35 @@ namespace TpaOk.Tests.IntegrationTests
                             ServiceId = Guid.NewGuid(),
                             ServiceCode = "KONS_INTERNISTA",
                             Date = new DateTime(2019,1,10),
-                            Price = Money.Euro(200),
+                            Price = Money.Euro(300),
                             Qt = 1
                         }
                     }
                 };
                 
                 // when
-                var httpResult = await system.Scenario(_ =>
+                var httpResultCaseOne = await system.Scenario(_ =>
                 {
                     _.Post
                         .Json(new CalculateCostSplitAndReserveLimitsCommand(medCaseOne))
                         .ToUrl("/api/Limits/calculateAndReserveLimits");
-                    
+                });
+                
+                var httpResultCaseTwo = await system.Scenario(_ =>
+                {
                     _.Post
                         .Json(new CalculateCostSplitAndReserveLimitsCommand(medCaseTwo))
                         .ToUrl("/api/Limits/calculateAndReserveLimits");
                 });
 
-                var costSplitResult = httpResult.ResponseBody.ReadAsJson<CalculateCostSplitAndReserveLimitsResult>();
+                var costSplitResult = httpResultCaseTwo.ResponseBody.ReadAsJson<CalculateCostSplitAndReserveLimitsResult>();
                 
                 // then
                 Assert.NotNull(costSplitResult);     
-                Assert.Equal(Money.Euro(10), costSplitResult.InsuredCost);
-                Assert.Equal(Money.Euro(90), costSplitResult.TuCost);
-                Assert.Equal(Money.Euro(100), costSplitResult.TotalCost);
-                Assert.Equal(Money.Euro(90), costSplitResult.AmountLimitConsumption);   
+                Assert.Equal(Money.Euro(110), costSplitResult.InsuredCost);
+                Assert.Equal(Money.Euro(190), costSplitResult.TuCost);
+                Assert.Equal(Money.Euro(300), costSplitResult.TotalCost);
+                Assert.Equal(Money.Euro(190), costSplitResult.AmountLimitConsumption);   
             }
         }
     }
