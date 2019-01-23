@@ -52,7 +52,7 @@ Poniżej przykład fragmentu takiego pliku zawierającego jedną polisę:
 						"maxQuantity": null,
 						"maxAmount": 100,
 						"limitPeriod": "POLICY_YEAR"
-						"Shared" : true
+						"shared": true
  					}
 				}, {
 					"code": "KONS_PEDIATRA",
