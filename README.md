@@ -2,12 +2,12 @@
 
 ## TPA OK - opis domeny
 
-Nasza firma TPA OK zajmuje siê administracj¹ polisami. Podpisuje umowê z towarzystwem ubezpieczeniowym na obs³ugê szkód medycznych z polis sprzedawanych przez towarzystwo.
+Nasza firma TPA OK zajmuje siÄ™ administracjÄ… polisami. Podpisuje umowÄ™ z towarzystwem ubezpieczeniowym na obsÅ‚ugÄ™ szkÃ³d medycznych z polis sprzedawanych przez towarzystwo.
 
-Towarzystwa dostarczaj¹ nam dane polis oraz zmian na polisach w postaci plików, które przesy³ane s¹ do nas z ró¿n¹ czêstotliwoœci¹. Niektóre towarzystwa wysy³aj¹ plik raz dziennie, inne w cyklach tygodniowych.
-Staramy siê, negocjuj¹c umowy zapewniæ, ¿e towarzystwo przeka¿e nam dane w ustalonym przez nas wspólnym formacie.
+Towarzystwa dostarczajÄ… nam dane polis oraz zmian na polisach w postaci plikÃ³w, ktÃ³re przesyÅ‚ane sÄ… do nas z rÃ³Å¼nÄ… czÄ™stotliwoÅ›ciÄ…. NiektÃ³re towarzystwa wysyÅ‚ajÄ… plik raz dziennie, inne w cyklach tygodniowych.
+Staramy siÄ™, negocjujÄ…c umowy zapewniÄ‡, Å¼e towarzystwo przekaÅ¼e nam dane w ustalonym przez nas wspÃ³lnym formacie.
 
-Poni¿ej przyk³ad fragmentu takiego pliku zawieraj¹cego jedn¹ polisê:
+PoniÅ¼ej przykÅ‚ad fragmentu takiego pliku zawierajÄ…cego jednÄ… polisÄ™:
 
 ```json
 {
@@ -52,7 +52,7 @@ Poni¿ej przyk³ad fragmentu takiego pliku zawieraj¹cego jedn¹ polisê:
 						"maxQuantity": null,
 						"maxAmount": 100,
 						"limitPeriod": "POLICY_YEAR"
-						“Shared” : true
+						"Shared" : true
  					}
 				}, {
 					"code": "KONS_PEDIATRA",
@@ -95,33 +95,33 @@ Poni¿ej przyk³ad fragmentu takiego pliku zawieraj¹cego jedn¹ polisê:
 }
 ```
 
-Otrzymujemy numer polisy, kod ubezpieczyciela, dane ubezpieczonego, okres obowi¹zywania polisy, datê zmiany (dla nowej polisy powinna zawsze byæ równa dacie pocz¹tku obowi¹zywania), kod produktu oraz listê ochron. Ochrony okreœlaj¹ jakie us³ugi medyczne s¹ objête polis¹.
-Dla ka¿dej us³ugi mo¿e byæ okreœlona wspó³p³atnoœæ (procentowa lub kwotowa) oraz limit. Wspó³p³atnoœæ to konkretna kwota lub procent ceny us³ugi, jak¹ pacjent musi zap³aciæ sam przy ka¿dej us³udze. Limit oznacza iloœæ us³ug / koszt jaki pokrywa ubezpieczyciel. Limit ma okreœlony czas po którym jest odnawiany.
-W chwili obecnej obs³ugujemy limity na rok polisowy, na szkodê i rok kalendarzowy.  
-Limit mo¿e dotyczyæ pojedynczego ubezpieczonego b¹dŸ byæ wspólny dla wszystkich osób na polisie.
+Otrzymujemy numer polisy, kod ubezpieczyciela, dane ubezpieczonego, okres obowiÄ…zywania polisy, datÄ™ zmiany (dla nowej polisy powinna zawsze byÄ‡ rÃ³wna dacie poczÄ…tku obowiÄ…zywania), kod produktu oraz listÄ™ ochron. Ochrony okreÅ›lajÄ… jakie usÅ‚ugi medyczne sÄ… objÄ™te polisÄ….
+Dla kaÅ¼dej usÅ‚ugi moÅ¼e byÄ‡ okreÅ›lona wspÃ³Å‚pÅ‚atnoÅ›Ä‡ (procentowa lub kwotowa) oraz limit. WspÃ³Å‚pÅ‚atnoÅ›Ä‡ to konkretna kwota lub procent ceny usÅ‚ugi, jakÄ… pacjent musi zapÅ‚aciÄ‡ sam przy kaÅ¼dej usÅ‚udze. Limit oznacza iloÅ›Ä‡ usÅ‚ug / koszt jaki pokrywa ubezpieczyciel. Limit ma okreÅ›lony czas po ktÃ³rym jest odnawiany.
+W chwili obecnej obsÅ‚ugujemy limity na rok polisowy, na szkodÄ™ i rok kalendarzowy.  
+Limit moÅ¼e dotyczyÄ‡ pojedynczego ubezpieczonego bÄ…dÅº byÄ‡ wspÃ³lny dla wszystkich osÃ³b na polisie.
 
-Nasza firma podpisuje umowy z placówkami medycznymi i sieciami takich placówek na œwiadczenie us³ug medycznych. Umowa taka zawierana jest na czas okreœlony (zazwyczaj na rok). Umowa zawiera listê placówek oraz cennik us³ug. Ceny mog¹ siê zmieniaæ w trakcie obowi¹zywania umowy.
-Niektóre placówki mog¹ mieæ wspólne cenniki, na przyk³ad wszystkie placówki MedHelp w Warszawie maj¹ wspólny cennik. Rozliczenia z placówkami odbywaj¹ siê wed³ug tych cenników. 
+Nasza firma podpisuje umowy z placÃ³wkami medycznymi i sieciami takich placÃ³wek na Å›wiadczenie usÅ‚ug medycznych. Umowa taka zawierana jest na czas okreÅ›lony (zazwyczaj na rok). Umowa zawiera listÄ™ placÃ³wek oraz cennik usÅ‚ug. Ceny mogÄ… siÄ™ zmieniaÄ‡ w trakcie obowiÄ…zywania umowy.
+NiektÃ³re placÃ³wki mogÄ… mieÄ‡ wspÃ³lne cenniki, na przykÅ‚ad wszystkie placÃ³wki MedHelp w Warszawie majÄ… wspÃ³lny cennik. Rozliczenia z placÃ³wkami odbywajÄ… siÄ™ wedÅ‚ug tych cennikÃ³w. 
 
-Pacjenci zg³aszaj¹ siê do placówek lub dzwoni¹ na nasze call center. Musimy teraz dokonaæ autoryzacji wizyty osoby w placówce medycznej. W tym celu musimy wyszukaæ dan¹ osobê i sprawdziæ czy ma ona aktywn¹ polisê. Jeœli nie mamy danych takiej osoby lub nie ma ona aktywnej polisy to informujemy o tym i nie obs³ugujemy dalej. Nastêpnie w przypadku call center musimy wyszukaæ placówkê. Dopuszczamy sytuacjê, ¿e wizyta odbywa siê w placówce, z któr¹ nie mamy umowy. Rejestrujemy sprawê i zbieramy informacjê o planowanych us³ugach: kod us³ugi, cena i iloœæ us³ug. Maj¹c te informacje mo¿emy znaj¹c historiê ubezpieczenia obliczyæ ile powinien zap³aciæ pacjent, ile powinien pokryæ ubezpieczyciel. U¿ytkownik z odpowiednimi kompetencjami mo¿e dokonaæ manualnej korekty takiej kalkulacji, w tym odmówiæ pokrycia kosztu us³ugi. Musi on w takiej sytuacji podaæ powód swojej decyzji. W przypadku placówek, z którymi mamy podpisan¹ umowê cena nie mo¿e przekraczaæ ceny ustalonej w cenniku. Taka wizyta mo¿e teraz zostaæ zaakceptowana lub odrzucona przez pacjenta. 
-Po wykonaniu zabiegu placówka potwierdza (chcielibyœmy mieæ to w systemie) wykonanie lub pacjent przysy³a do nas fakturê za wizytê w przypadku placówek z którymi nie mamy umowy). W przypadku faktury musimy wyszukaæ sprawê i sprawdziæ czy koszt zgodny jest z naszymi wyliczeniami. Jeœli nie, musimy sprawê wyjaœniæ z placówk¹ medyczn¹ i dokonaæ korekty. 
-Placówki, z którymi mamy podpisane umowy przesy³aj¹ nam raporty wykonanych us³ug (w cyklach tygodniowych lub miesiêcznych). Taki raport musi zostaæ zweryfikowany ze stanem po naszej stronie. Report zawiera kody us³ug, daty realizacji, cenê, dane identyfikuj¹ce pacjenta i numer polisy. Us³ugi, które s¹ u nas zarejestrowane a nie ma ich w raporcie uwa¿amy za niewykonane. Us³ugi, których nie uda³o siê zidentyfikowaæ s¹ tworzone i oznaczane jako wymagaj¹ce wyjaœnienia. Us³ugi zidentyfikowane, gdzie wystêpuj¹ ró¿nice równie¿ oznaczane s¹ jako do wyjaœnienia.
-Przegl¹damy takie us³ugi i po wyjaœnieniu z placówk¹ / pacjentem akceptujemy lub odrzucamy.
+Pacjenci zgÅ‚aszajÄ… siÄ™ do placÃ³wek lub dzwoniÄ… na nasze call center. Musimy teraz dokonaÄ‡ autoryzacji wizyty osoby w placÃ³wce medycznej. W tym celu musimy wyszukaÄ‡ danÄ… osobÄ™ i sprawdziÄ‡ czy ma ona aktywnÄ… polisÄ™. JeÅ›li nie mamy danych takiej osoby lub nie ma ona aktywnej polisy to informujemy o tym i nie obsÅ‚ugujemy dalej. NastÄ™pnie w przypadku call center musimy wyszukaÄ‡ placÃ³wkÄ™. Dopuszczamy sytuacjÄ™, Å¼e wizyta odbywa siÄ™ w placÃ³wce, z ktÃ³rÄ… nie mamy umowy. Rejestrujemy sprawÄ™ i zbieramy informacjÄ™ o planowanych usÅ‚ugach: kod usÅ‚ugi, cena i iloÅ›Ä‡ usÅ‚ug. MajÄ…c te informacje moÅ¼emy znajÄ…c historiÄ™ ubezpieczenia obliczyÄ‡ ile powinien zapÅ‚aciÄ‡ pacjent, ile powinien pokryÄ‡ ubezpieczyciel. UÅ¼ytkownik z odpowiednimi kompetencjami moÅ¼e dokonaÄ‡ manualnej korekty takiej kalkulacji, w tym odmÃ³wiÄ‡ pokrycia kosztu usÅ‚ugi. Musi on w takiej sytuacji podaÄ‡ powÃ³d swojej decyzji. W przypadku placÃ³wek, z ktÃ³rymi mamy podpisanÄ… umowÄ™ cena nie moÅ¼e przekraczaÄ‡ ceny ustalonej w cenniku. Taka wizyta moÅ¼e teraz zostaÄ‡ zaakceptowana lub odrzucona przez pacjenta. 
+Po wykonaniu zabiegu placÃ³wka potwierdza (chcielibyÅ›my mieÄ‡ to w systemie) wykonanie lub pacjent przysyÅ‚a do nas fakturÄ™ za wizytÄ™ w przypadku placÃ³wek z ktÃ³rymi nie mamy umowy). W przypadku faktury musimy wyszukaÄ‡ sprawÄ™ i sprawdziÄ‡ czy koszt zgodny jest z naszymi wyliczeniami. JeÅ›li nie, musimy sprawÄ™ wyjaÅ›niÄ‡ z placÃ³wkÄ… medycznÄ… i dokonaÄ‡ korekty. 
+PlacÃ³wki, z ktÃ³rymi mamy podpisane umowy przesyÅ‚ajÄ… nam raporty wykonanych usÅ‚ug (w cyklach tygodniowych lub miesiÄ™cznych). Taki raport musi zostaÄ‡ zweryfikowany ze stanem po naszej stronie. Report zawiera kody usÅ‚ug, daty realizacji, cenÄ™, dane identyfikujÄ…ce pacjenta i numer polisy. UsÅ‚ugi, ktÃ³re sÄ… u nas zarejestrowane a nie ma ich w raporcie uwaÅ¼amy za niewykonane. UsÅ‚ugi, ktÃ³rych nie udaÅ‚o siÄ™ zidentyfikowaÄ‡ sÄ… tworzone i oznaczane jako wymagajÄ…ce wyjaÅ›nienia. UsÅ‚ugi zidentyfikowane, gdzie wystÄ™pujÄ… rÃ³Å¼nice rÃ³wnieÅ¼ oznaczane sÄ… jako do wyjaÅ›nienia.
+PrzeglÄ…damy takie usÅ‚ugi i po wyjaÅ›nieniu z placÃ³wkÄ… / pacjentem akceptujemy lub odrzucamy.
 
-Klient mo¿e równie¿ do nas zadzwoniæ, ¿eby sprawdziæ czy dany zabieg lub badanie jest pokrywany przez jego ubezpieczenie.
+Klient moÅ¼e rÃ³wnieÅ¼ do nas zadzwoniÄ‡, Å¼eby sprawdziÄ‡ czy dany zabieg lub badanie jest pokrywany przez jego ubezpieczenie.
 
-Rozliczenie z placówkami medycznymi odbywa siê w cyklach okreœlonych na umowie (miesiêcznie lub kwartalnie). Za ka¿d¹ zrealizowan¹ us³ugê przekazujemy kwotê wyliczon¹ wczeœniej jako udzia³ ubezpieczyciela. P³atnoœæ odbywa siê na podstawie faktury przekazanej przez placówkê. 
+Rozliczenie z placÃ³wkami medycznymi odbywa siÄ™ w cyklach okreÅ›lonych na umowie (miesiÄ™cznie lub kwartalnie). Za kaÅ¼dÄ… zrealizowanÄ… usÅ‚ugÄ™ przekazujemy kwotÄ™ wyliczonÄ… wczeÅ›niej jako udziaÅ‚ ubezpieczyciela. PÅ‚atnoÅ›Ä‡ odbywa siÄ™ na podstawie faktury przekazanej przez placÃ³wkÄ™. 
 
-Z ubezpieczycielami rozliczamy siê równie¿ w cyklach okreœlonych na umowie. Wystawimy fakturê zawieraj¹ca koszt wyliczony jako udzia³ ubezpieczyciela we wszystkich sprawach w danym okresie. Faktura rozbita jest na pozycje per produkt ubezpieczyciela i us³uga. Do faktury doliczamy rycza³t za ka¿dego ubezpieczonego zgodnie z stawk¹ na umowie.
+Z ubezpieczycielami rozliczamy siÄ™ rÃ³wnieÅ¼ w cyklach okreÅ›lonych na umowie. Wystawimy fakturÄ™ zawierajÄ…ca koszt wyliczony jako udziaÅ‚ ubezpieczyciela we wszystkich sprawach w danym okresie. Faktura rozbita jest na pozycje per produkt ubezpieczyciela i usÅ‚uga. Do faktury doliczamy ryczaÅ‚t za kaÅ¼dego ubezpieczonego zgodnie z stawkÄ… na umowie.
 
-Poniewa¿ kontrola kosztów jest dla i naszych klientów niezwykle wa¿na, to chcielibyœmy mieæ mo¿liwoœæ wykrywania nadu¿yæ np. du¿a czêstotliwoœæ korzystania z danej us³ugi lub dziwne po³¹czenie diagnozy z us³ug¹.
+PoniewaÅ¼ kontrola kosztÃ³w jest dla i naszych klientÃ³w niezwykle waÅ¼na, to chcielibyÅ›my mieÄ‡ moÅ¼liwoÅ›Ä‡ wykrywania naduÅ¼yÄ‡ np. duÅ¼a czÄ™stotliwoÅ›Ä‡ korzystania z danej usÅ‚ugi lub dziwne poÅ‚Ä…czenie diagnozy z usÅ‚ugÄ….
 
 
-Sposób wyliczenia podzia³u kosztu us³ugi:
-sprawdzenie, czy na polisie w ochronach jest us³uga o kodzie z pozycji, jeœli nie ma to ca³y koszt ponosi ubezpieczony,
-system wylicza udzia³ w³asny na podstawie definicji co-payment z polisy (procentowy lub kwotowy)
-nastêpnie pozosta³a kwota porównywana jest z limitem na dan¹ us³ugê i dotychczasowym zu¿yciem tego limitu
+SposÃ³b wyliczenia podziaÅ‚u kosztu usÅ‚ugi:
+sprawdzenie, czy na polisie w ochronach jest usÅ‚uga o kodzie z pozycji, jeÅ›li nie ma to caÅ‚y koszt ponosi ubezpieczony,
+system wylicza udziaÅ‚ wÅ‚asny na podstawie definicji co-payment z polisy (procentowy lub kwotowy)
+nastÄ™pnie pozostaÅ‚a kwota porÃ³wnywana jest z limitem na danÄ… usÅ‚ugÄ™ i dotychczasowym zuÅ¼yciem tego limitu
 
-Przyk³ad limitu:  "limit" : max koszt 100 PLN, okres rozliczenia rok polisowy oznacza, ¿e w ci¹gu roku polisowego ubezpieczonemu przys³uguje zwrot maksymalnie 100 PLN, ale ma nieograniczon¹ liczbê wyst¹pienia us³ugi. 
+PrzykÅ‚ad limitu:  "limit" : max koszt 100 PLN, okres rozliczenia rok polisowy oznacza, Å¼e w ciÄ…gu roku polisowego ubezpieczonemu przysÅ‚uguje zwrot maksymalnie 100 PLN, ale ma nieograniczonÄ… liczbÄ™ wystÄ…pienia usÅ‚ugi. 
 
-W ten sposób powstaje kwota do zap³aty przez ubezpieczyciela.
+W ten sposÃ³b powstaje kwota do zapÅ‚aty przez ubezpieczyciela.
