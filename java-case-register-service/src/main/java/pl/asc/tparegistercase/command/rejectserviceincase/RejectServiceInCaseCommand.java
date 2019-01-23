@@ -1,4 +1,4 @@
-package pl.asc.tparegistercase.command.rejectservice;
+package pl.asc.tparegistercase.command.rejectserviceincase;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

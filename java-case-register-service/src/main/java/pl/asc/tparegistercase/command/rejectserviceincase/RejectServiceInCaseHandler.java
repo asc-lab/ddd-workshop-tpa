@@ -1,4 +1,4 @@
-package pl.asc.tparegistercase.command.rejectservice;
+package pl.asc.tparegistercase.command.rejectserviceincase;
 
 import lombok.RequiredArgsConstructor;
 import pl.asc.tparegistercase.cqs.CommandHandler;
