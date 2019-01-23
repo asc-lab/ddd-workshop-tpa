@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TpaOk", "TpaOk\TpaOk.csproj", "{BD81677D-F673-4203-89B0-C6A20390C555}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TpaOk.Tests", "TpaOk.Tests\TpaOk.Tests.csproj", "{B055D71D-BB0C-4012-B3DE-0AA255585460}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD81677D-F673-4203-89B0-C6A20390C555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD81677D-F673-4203-89B0-C6A20390C555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD81677D-F673-4203-89B0-C6A20390C555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD81677D-F673-4203-89B0-C6A20390C555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B055D71D-BB0C-4012-B3DE-0AA255585460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B055D71D-BB0C-4012-B3DE-0AA255585460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B055D71D-BB0C-4012-B3DE-0AA255585460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B055D71D-BB0C-4012-B3DE-0AA255585460}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
