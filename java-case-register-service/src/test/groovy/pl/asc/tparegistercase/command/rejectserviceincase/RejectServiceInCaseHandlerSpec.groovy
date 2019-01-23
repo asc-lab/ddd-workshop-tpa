@@ -1,4 +1,4 @@
-package pl.asc.tparegistercase.command.rejectservice
+package pl.asc.tparegistercase.command.rejectserviceincase
 
 import pl.asc.tparegistercase.CaseBuilder
 import pl.asc.tparegistercase.command.acceptserviceincase.AcceptServiceInCaseCommand
