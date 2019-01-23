@@ -1,4 +1,4 @@
-package pl.asc.tparegistercase.command.acceptserviceincase
+package pl.asc.tparegistercase.command.updateserviceincase
 
 import pl.asc.tparegistercase.CaseBuilder
 import pl.asc.tparegistercase.command.acceptserviceincase.AcceptServiceInCaseCommand
@@ -10,9 +10,10 @@ import spock.lang.Specification
 
 import java.time.LocalDateTime
 
-class AcceptServiceInCaseHandlerSpec extends Specification {
+class UpdateServiceInCaseHandlerSpec extends Specification {
 
-    def "should accept 1 service with qt 1"() {
+
+    def "should update service in case with order number 2"() {
         given:
             def repository = new CaseRepositoryTestImpl()
             def costReportServiceImpl = new CostReportServiceImpl()
@@ -26,12 +27,17 @@ class AcceptServiceInCaseHandlerSpec extends Specification {
                     facilityCode: 'LUXMED_JEROZOLIMSKIE',
                     visitDate: LocalDateTime.now()))
 
+
+            new UpdateServiceInCaseHandler(repository, costReportServiceImpl, mspPriceServiceTestImpl).handle(new UpdateServiceInCaseCommand(
+                    caseNumber: aCase.getCaseNumber(),
+                    serviceCode: 'INTERNISTA',
+                    serviceQuantity: 1,
+                    facilityCode: 'LUXMED_JEROZOLIMSKIE',
+                    visitDate: LocalDateTime.now(),
+                    orderNumber: 1))
         then:
-            aCase.caseNumber.startsWith('CASE_')
-            aCase.caseNumber.length() == 19
             aCase.services.size() == 1
-            aCase.totalPrice() == BigDecimal.valueOf(20)
-            aCase.getInsured() != null
-            aCase.costReport != null
+            aCase.totalPrice() == BigDecimal.valueOf(10)
+
     }
 }

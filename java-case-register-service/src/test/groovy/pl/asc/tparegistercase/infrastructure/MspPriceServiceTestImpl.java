@@ -21,7 +21,7 @@ public class MspPriceServiceTestImpl implements MSPPriceService {
     }
 
     @Override
-    public Optional<ServiceInCasePrice> findByFacilityAndService(String facilityCode, String serviceCode) {
+    public Optional<ServiceInCasePrice> findByFacilityAndService(String serviceCode, String facilityCode) {
         return pricing.stream()
                 .filter(p -> p.getFacilityCode().equals(facilityCode))
                 .filter(p -> p.getServiceCode().equals(serviceCode))

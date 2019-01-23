@@ -39,15 +39,7 @@ public class Case {
         this.caseEvents.add(new CaseRegistrationFinishedEvent());
     }
 
-
     public void addService(String serviceCode, Integer serviceQuantity, String facilityCode, LocalDateTime visitDate) {
-        if (mspPriceService == null) {
-            throw new RuntimeException("MSPPriceService cannot be null.");
-        }
-
-        ServiceInCasePrice price = mspPriceService.findByFacilityAndService(facilityCode, serviceCode)
-                .orElseThrow(() -> new RuntimeException("Price cannot be null."));
-
         this.services.add(
                 new ServiceInCase(
                         services.size() + 1,
@@ -55,7 +47,7 @@ public class Case {
                         serviceQuantity,
                         facilityCode,
                         visitDate,
-                        price.getPrice()
+                        calculateServiceInCasePrice(serviceCode, facilityCode).getPrice()
                 )
         );
 
@@ -63,12 +55,23 @@ public class Case {
         calculateCostReport();
     }
 
-    public BigDecimal totalPrice() {
-        return new ServiceInCaseCollection(this.services).totalPrice();
+
+    public void updateService(String serviceCode, Integer serviceQuantity, String facilityCode, LocalDateTime visitDate, Integer orderNumber) {
+        ServiceInCase serviceInCase = serviceInCaseCollection()
+                .findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new RuntimeException("There is no service in case with number: "));
+
+        serviceInCase.update(serviceCode,
+                serviceQuantity,
+                facilityCode,
+                visitDate,
+                calculateServiceInCasePrice(serviceCode, facilityCode).getPrice());
+        this.caseEvents.add(new ServiceInCaseUpdatedEvent());
+        calculateCostReport();
     }
 
     public void rejectServiceInCase(Integer serviceOrderNumber, String rejectionReason) {
-        ServiceInCase serviceToReject = new ServiceInCaseCollection(this.services)
+        ServiceInCase serviceToReject = serviceInCaseCollection()
                 .findByOrderNumber(serviceOrderNumber)
                 .orElseThrow(() -> new RuntimeException("There is no service in case with number: " + serviceOrderNumber));
 
@@ -77,6 +80,18 @@ public class Case {
         this.caseEvents.add(new RejectedCaseEvent());
         reNumberServicesInCase();
         calculateCostReport();
+    }
+
+    public BigDecimal totalPrice() {
+        return serviceInCaseCollection().totalPrice();
+    }
+
+    private ServiceInCasePrice calculateServiceInCasePrice(String serviceCode, String facilityCode) {
+        if (mspPriceService == null) {
+            throw new RuntimeException("MSPPriceService cannot be null.");
+        }
+        return mspPriceService.findByFacilityAndService(serviceCode, facilityCode)
+                .orElseThrow(() -> new RuntimeException("Price cannot be null."));
     }
 
     private void calculateCostReport() {
@@ -90,5 +105,8 @@ public class Case {
         IntStream.range(0, this.services.size()).forEach(i -> this.services.get(i).reNumber(++i));
     }
 
+    private ServiceInCaseCollection serviceInCaseCollection() {
+        return new ServiceInCaseCollection(this.services);
+    }
 
 }

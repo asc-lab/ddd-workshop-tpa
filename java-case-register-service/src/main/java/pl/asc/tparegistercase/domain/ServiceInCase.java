@@ -21,4 +21,11 @@ public class ServiceInCase {
         this.order = order;
     }
 
+    void update(String serviceCode, Integer serviceQuantity, String facilityCode, LocalDateTime visitDate, Monetary price) {
+        this.serviceCode = serviceCode;
+        this.serviceQuantity = serviceQuantity;
+        this.facilityCode = facilityCode;
+        this.visitDate = visitDate;
+        this.price = price;
+    }
 }

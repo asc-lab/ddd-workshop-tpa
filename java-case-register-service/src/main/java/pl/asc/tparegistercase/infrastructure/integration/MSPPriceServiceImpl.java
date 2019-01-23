@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class MSPPriceServiceImpl implements MSPPriceService {
     @Override
-    public Optional<ServiceInCasePrice> findByFacilityAndService(String facilityCode, String serviceCode) {
+    public Optional<ServiceInCasePrice> findByFacilityAndService(String serviceCode, String facilityCode) {
         return Optional.empty();
     }
 }

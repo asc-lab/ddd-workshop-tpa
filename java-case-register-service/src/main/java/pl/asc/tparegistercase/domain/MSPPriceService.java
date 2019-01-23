@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface MSPPriceService {
 
-    Optional<ServiceInCasePrice> findByFacilityAndService(String facilityCode, String serviceCode);
+    Optional<ServiceInCasePrice> findByFacilityAndService(String serviceCode, String facilityCode);
 
 }
