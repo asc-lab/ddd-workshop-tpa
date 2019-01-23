@@ -51,7 +51,7 @@ Poniżej przykład fragmentu takiego pliku zawierającego jedną polisę:
 					"limit": {
 						"maxQuantity": null,
 						"maxAmount": 100,
-						"limitPeriod": "POLICY_YEAR"
+						"limitPeriod": "POLICY_YEAR",
 						"shared": true
  					}
 				}, {
