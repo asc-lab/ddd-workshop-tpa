@@ -45,9 +45,4 @@ class AcceptServiceInCaseHandlerSpec extends Specification {
         // dodać value object , opioisująćy cost report na casie, zwalidować go
         //1 * wywyłanie licznie cost repost
     }
-
-
-    def ""() {
-
-    }
 }
