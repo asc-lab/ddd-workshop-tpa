@@ -1,7 +1,6 @@
 package pl.asc.tparegistercase.domain
 
 import pl.asc.tparegistercase.command.registercase.RegisterCaseCommand
-import pl.asc.tparegistercase.domain.CaseFactory
 import pl.asc.tparegistercase.infrastructure.CostReportServiceImpl
 import pl.asc.tparegistercase.infrastructure.MspPriceServiceTestImpl
 import spock.lang.Specification
@@ -13,14 +12,14 @@ class CaseSpec extends Specification {
     def "should reorder service order numbers after rejection 1 service"() {
         given:
             def aCase = new CaseFactory(new RegisterCaseCommand()).create()
-            aCase.setMspPriceService(new MspPriceServiceTestImpl())
-            aCase.setCostReportService(new CostReportServiceImpl())
-            aCase.addService("INTERNISTA", 1, "MEDI_KRAKOW", LocalDateTime.now())
-            aCase.addService("DENTYSTA", 3, "MEDI_KRAKOW", LocalDateTime.now())
-            aCase.addService("INTERNISTA", 5, "MEDI_KRAKOW", LocalDateTime.now())
-            aCase.addService("DENTYSTA", 5, "MEDI_KRAKOW", LocalDateTime.now())
+            def mspPriceService = new MspPriceServiceTestImpl()
+            def costReportService = new CostReportServiceImpl()
+            aCase.addService("INTERNISTA", 1, "MEDI_KRAKOW", LocalDateTime.now(), costReportService, mspPriceService)
+            aCase.addService("DENTYSTA", 3, "MEDI_KRAKOW", LocalDateTime.now(), costReportService, mspPriceService)
+            aCase.addService("INTERNISTA", 5, "MEDI_KRAKOW", LocalDateTime.now(), costReportService, mspPriceService)
+            aCase.addService("DENTYSTA", 5, "MEDI_KRAKOW", LocalDateTime.now(), costReportService, mspPriceService)
         when:
-            aCase.rejectServiceInCase(3, "To Expensive.")
+            aCase.rejectServiceInCase(3, "To Expensive.", costReportService)
         then:
             aCase.services.get(0).order == 1
             aCase.services.get(1).order == 2
@@ -30,10 +29,10 @@ class CaseSpec extends Specification {
     def "should calculate total price"() {
         given:
             def aCase = new CaseFactory(new RegisterCaseCommand()).create()
-            aCase.setMspPriceService(new MspPriceServiceTestImpl())
-            aCase.setCostReportService(new CostReportServiceImpl())
-            aCase.addService("INTERNISTA", 1, "LUXMED_JEROZOLIMSKIE", LocalDateTime.now())
-            aCase.addService("DENTYSTA", 5, "LUXMED_JEROZOLIMSKIE", LocalDateTime.now())
+            def mspPriceService = new MspPriceServiceTestImpl()
+            def costReportService = new CostReportServiceImpl()
+            aCase.addService("INTERNISTA", 1, "LUXMED_JEROZOLIMSKIE", LocalDateTime.now(), costReportService, mspPriceService)
+            aCase.addService("DENTYSTA", 5, "LUXMED_JEROZOLIMSKIE", LocalDateTime.now(), costReportService, mspPriceService)
         when:
             def totalPrice = aCase.totalPrice()
         then:

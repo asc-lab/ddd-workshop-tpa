@@ -5,7 +5,5 @@ import pl.asc.tparegistercase.domain.vo.ServiceInCasePrice;
 import java.util.Optional;
 
 public interface MSPPriceService {
-
     Optional<ServiceInCasePrice> findByFacilityAndService(String serviceCode, String facilityCode);
-
 }

@@ -1,9 +1,7 @@
 package pl.asc.tparegistercase.command.registercase
 
-
+import pl.asc.tparegistercase.domain.CaseService
 import pl.asc.tparegistercase.infrastructure.CaseRepositoryTestImpl
-import pl.asc.tparegistercase.infrastructure.CostReportServiceImpl
-import pl.asc.tparegistercase.infrastructure.MspPriceServiceTestImpl
 import spock.lang.Specification
 
 class RegisterCaseHandlerSpec extends Specification {
@@ -14,10 +12,11 @@ class RegisterCaseHandlerSpec extends Specification {
         given:
             def repository = new CaseRepositoryTestImpl()
             def registerCaseCommand = new RegisterCaseCommand(pesel: '93010267675', firstName: 'Jan', lastName: 'Kowalski', policyNr: 'POL1', city: 'Warsaw')
+            def service = new CaseService(repository, null, null)
         when:
-            RegisterCaseResult caseResult = new RegisterCaseHandler(repository).handle(registerCaseCommand)
+            def caseResult = new RegisterCaseHandler(service).handle(registerCaseCommand)
         then:
-            def aCase = repository.findByCaseNumber(caseResult.caseNumber, new CostReportServiceImpl(), new MspPriceServiceTestImpl())
+            def aCase = repository.findByCaseNumber(caseResult.caseNumber)
             aCase.caseNumber.startsWith('CASE_')
             aCase.caseNumber.length() == 19
             aCase.services.size() == 0

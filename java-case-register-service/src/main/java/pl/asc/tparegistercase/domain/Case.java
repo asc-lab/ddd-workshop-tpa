@@ -1,7 +1,6 @@
 package pl.asc.tparegistercase.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import pl.asc.tparegistercase.domain.vo.CostReport;
 import pl.asc.tparegistercase.domain.vo.ServiceInCasePrice;
 
@@ -14,17 +13,13 @@ import java.util.stream.IntStream;
 @Getter
 public class Case {
 
+    private String id;
     private String caseNumber;
     private Insured insured;
     private List<ServiceInCase> services;
     private List<RejectedServiceInCase> rejectedServices;
-    private List<CaseEvent> caseEvents;
     private List<CostReport> costReport;
-    //transient
-    @Setter
-    private CostReportService costReportService;
-    @Setter
-    private MSPPriceService mspPriceService;
+    private List<CaseEvent> caseEvents;
 
     Case(String caseNumber, Insured insured) {
         this.caseNumber = caseNumber;
@@ -35,11 +30,16 @@ public class Case {
         this.caseEvents.add(new RegisteredCaseEvent());
     }
 
-    public void finishCaseRegistration() {
+    void finishCaseRegistration() {
         this.caseEvents.add(new CaseRegistrationFinishedEvent());
     }
 
-    public void addService(String serviceCode, Integer serviceQuantity, String facilityCode, LocalDateTime visitDate) {
+    void addService(String serviceCode,
+                           Integer serviceQuantity,
+                           String facilityCode,
+                           LocalDateTime visitDate,
+                           CostReportService costReportService,
+                           MSPPriceService mspPriceService) {
         this.services.add(
                 new ServiceInCase(
                         services.size() + 1,
@@ -47,16 +47,22 @@ public class Case {
                         serviceQuantity,
                         facilityCode,
                         visitDate,
-                        calculateServiceInCasePrice(serviceCode, facilityCode).getPrice()
+                        calculateServiceInCasePrice(mspPriceService, serviceCode, facilityCode).getPrice()
                 )
         );
 
         this.caseEvents.add(new ServiceInCaseAddedEvent());
-        calculateCostReport();
+        calculateCostReport(costReportService);
     }
 
 
-    public void updateService(String serviceCode, Integer serviceQuantity, String facilityCode, LocalDateTime visitDate, Integer orderNumber) {
+    void updateService(String serviceCode,
+                       Integer serviceQuantity,
+                       String facilityCode,
+                       LocalDateTime visitDate,
+                       Integer orderNumber,
+                       CostReportService costReportService,
+                       MSPPriceService mspPriceService) {
         ServiceInCase serviceInCase = serviceInCaseCollection()
                 .findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new RuntimeException("There is no service in case with number: "));
@@ -65,12 +71,14 @@ public class Case {
                 serviceQuantity,
                 facilityCode,
                 visitDate,
-                calculateServiceInCasePrice(serviceCode, facilityCode).getPrice());
+                calculateServiceInCasePrice(mspPriceService, serviceCode, facilityCode).getPrice());
         this.caseEvents.add(new ServiceInCaseUpdatedEvent());
-        calculateCostReport();
+        calculateCostReport(costReportService);
     }
 
-    public void rejectServiceInCase(Integer serviceOrderNumber, String rejectionReason) {
+    void rejectServiceInCase(Integer serviceOrderNumber,
+                             String rejectionReason,
+                             CostReportService costReportService) {
         ServiceInCase serviceToReject = serviceInCaseCollection()
                 .findByOrderNumber(serviceOrderNumber)
                 .orElseThrow(() -> new RuntimeException("There is no service in case with number: " + serviceOrderNumber));
@@ -79,14 +87,14 @@ public class Case {
         this.rejectedServices.add(RejectedServiceInCase.fromExistingServiceInCase(serviceToReject, rejectionReason));
         this.caseEvents.add(new RejectedCaseEvent());
         reNumberServicesInCase();
-        calculateCostReport();
+        calculateCostReport(costReportService);
     }
 
     public BigDecimal totalPrice() {
         return serviceInCaseCollection().totalPrice();
     }
 
-    private ServiceInCasePrice calculateServiceInCasePrice(String serviceCode, String facilityCode) {
+    private ServiceInCasePrice calculateServiceInCasePrice(MSPPriceService mspPriceService, String serviceCode, String facilityCode) {
         if (mspPriceService == null) {
             throw new RuntimeException("MSPPriceService cannot be null.");
         }
@@ -94,7 +102,7 @@ public class Case {
                 .orElseThrow(() -> new RuntimeException("Price cannot be null."));
     }
 
-    private void calculateCostReport() {
+    private void calculateCostReport(CostReportService costReportService) {
         if (costReportService == null) {
             throw new RuntimeException("CostReportService cannot be null.");
         }
@@ -108,5 +116,6 @@ public class Case {
     private ServiceInCaseCollection serviceInCaseCollection() {
         return new ServiceInCaseCollection(this.services);
     }
+
 
 }
