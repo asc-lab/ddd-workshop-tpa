@@ -1,4 +1,16 @@
-# ddd-workshop-tpa
+# DDD Workshop - TPA for medical policies
+
+<p align="center">
+    <img alt="Event Storming Big Picture" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/event_storming_big_picture.png" />
+</p>
+
+<p align="center">
+    <img alt="Event Storming Design Level" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/event_storming_design_level.png" />
+</p>
+
+<p align="center">
+    <img alt="Examples" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/examples.png" />
+</p>
 
 ## TPA OK - opis domeny
 
@@ -6,94 +18,7 @@ Nasza firma TPA OK zajmuje się administracją polisami. Podpisuje umowę z towa
 
 Towarzystwa dostarczają nam dane polis oraz zmian na polisach w postaci plików, które przesyłane są do nas z różną częstotliwością. Niektóre towarzystwa wysyłają plik raz dziennie, inne w cyklach tygodniowych.
 Staramy się, negocjując umowy zapewnić, że towarzystwo przekaże nam dane w ustalonym przez nas wspólnym formacie.
-
-Poniżej przykład fragmentu takiego pliku zawierającego jedną polisę:
-
-```json
-{
-	"policyNumber": "P1212121",
-	"Insurer": "PZYOU",
-	"productCode": "Pakiet Gold",
-	"Insureds": [ {
-		"firstName": "Jan",
-		"lastName": "Nowak",
-		"pesel": "1111111116",
-		"accountNumber": "2738123834783247723",
-		"address": {
-			"country": "PL",
-			"city": "Warszawa",
-			"zipCode": "01-001",
-			"street": "JaksTam 123 m 2"
-		}
-	}, {
-		"firstName": "Maria",
-		"lastName": "Nowak",
-		"pesel": "2111111116",
-		"accountNumber": "2738123834783247723",
-		"address": {
-			"country": "PL",
-			"city": "Warszawa",
-			"zipCode": "01-001",
-			"street": "JaksTam 123 m 2"
-		}
-	}  
-],
-	"policyValidFrom": "2018-01-01",
-	"policyValidTo": "2018-12-31",
-	"changeDate": "2018-01-01",
-	"covers": [{
-			"coverCode": "KONS",
-			"services": [{
-					"code": "KONS_INTERNISTA",
-					"coPayment": {
-						"percent": 0.25
-					},
-					"limit": {
-						"maxQuantity": null,
-						"maxAmount": 100,
-						"limitPeriod": "POLICY_YEAR",
-						"shared": true
- 					}
-				}, {
-					"code": "KONS_PEDIATRA",
-					"coPayment": {
-						"amount": 10
-					},
-					"limit": {
-						"maxQuantity": 20,
-						"maxAmount": 100,
-						"limitPeriod": "POLICY_YEAR"
-					}
-				}
-			]
-		}, {
-			"coverCode": "LAB",
-			"services": [{
-					"code": "LAB_KREW_OB",
-					"coPayment": {
-						"percent": 0.10
-					},
-					"limit": {
-						"maxQuantity": 5,
-						"maxAmount": 50,
-						"limitPeriod": "POLICY_YEAR"
-					}
-				}, {
-					"code": "LAB_HDL",
-					"coPayment": {
-						"amount": 2
-					},
-					"limit": {
-						"maxQuantity": 2,
-						"maxAmount": 28,
-						"limitPeriod": "POLICY_YEAR"
-					}
-				}
-			]
-		}
-	]
-}
-```
+W pliku [examples/policy.json](examples/policy.json) przykład fragmentu takiego pliku zawierającego jedną polisę.
 
 Otrzymujemy numer polisy, kod ubezpieczyciela, dane ubezpieczonego, okres obowiązywania polisy, datę zmiany (dla nowej polisy powinna zawsze być równa dacie początku obowiązywania), kod produktu oraz listę ochron. Ochrony określają jakie usługi medyczne są objęte polisą.
 Dla każdej usługi może być określona współpłatność (procentowa lub kwotowa) oraz limit. Współpłatność to konkretna kwota lub procent ceny usługi, jaką pacjent musi zapłacić sam przy każdej usłudze. Limit oznacza ilość usług / koszt jaki pokrywa ubezpieczyciel. Limit ma określony czas po którym jest odnawiany.
