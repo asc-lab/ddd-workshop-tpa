@@ -1,15 +1,15 @@
 # DDD Workshop - TPA for medical policies
 
 <p align="center">
-    <img alt="Event Storming Big Picture" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/event_storming_big_picture.png" />
+    <img alt="Event Storming Big Picture" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/event_storming_big_picture.jpg" />
 </p>
 
 <p align="center">
-    <img alt="Event Storming Design Level" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/event_storming_design_level.png" />
+    <img alt="Event Storming Design Level" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/event_storming_design_level.jpg" />
 </p>
 
 <p align="center">
-    <img alt="Examples" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/examples.png" />
+    <img alt="Examples" src="https://raw.githubusercontent.com/asc-lab/ddd-workshop-tpa/master/readme-images/examples.jpg" />
 </p>
 
 ## TPA OK - opis domeny
