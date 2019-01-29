@@ -27,13 +27,20 @@ namespace TpaOk.Domain.Limits
                 return LimitsApplicationResult.NoApplied();
             }
 
+            var consumptionPeriod = limit.CalculatePeriod(caseService.Date, _policyVersion);
             var limitConsumptionContainer = _limitConsumptionContainers.GetLimitConsumptionContainer
             (
                 caseService,
                 limit,
-                limit.CalculatePeriod(caseService.Date, _policyVersion)
+                consumptionPeriod
             );
-            
+
+            if (limitConsumptionContainer == null)
+            {
+                limitConsumptionContainer =
+                    new LimitConsumptionContainerFactory().Create(caseService, limit, consumptionPeriod);
+                _limitConsumptionContainers.Add(limitConsumptionContainer);
+            }
             
             
             var limitCalculation = limit.Calculate

@@ -13,94 +13,48 @@ namespace TpaOk.Tests.UnitTests
         {
             if (limit.LimitPeriod is PerCaseLimitPeriod)
             {
-                return FindOrCreatePerCaseConsumptionContainerForService(caseService);
+                return FindPerCaseConsumptionContainerForService(caseService);
             }
             else if (limit.Shared)
             {
-                return FindOrCreatePerPolicyContainerForService(caseService, period);
+                return FindPerPolicyContainerForService(caseService, period);
             }
             else
             {
-                return FindOrCreatePerInsuredContainerForService(caseService, period);
+                return FindPerInsuredContainerForService(caseService, period);
             }
         }
         
-        private LimitConsumptionContainer FindOrCreatePerInsuredContainerForService(CaseServiceCostSplit caseService,
+        private LimitConsumptionContainer FindPerInsuredContainerForService(CaseServiceCostSplit caseService,
             Period period)
         {
-            var container = _containers
-                .OfType<IndividualInsuredConsumptionContainerForService>()
+            return _containers.OfType<IndividualInsuredConsumptionContainerForService>()
                 .FirstOrDefault(cs =>
                     cs.PolicyId == caseService.PolicyId
                     && cs.ServiceCode == caseService.ServiceCode
                     && cs.InsuredId == caseService.InsuredId
                     && cs.Period.From.Date == period.From.Date
                     && cs.Period.To.Date == period.To.Date);
-
-            if (container == null)
-            {
-                container = new IndividualInsuredConsumptionContainerForService
-                (
-                    caseService.PolicyId,
-                    caseService.ServiceCode,
-                    caseService.InsuredId,
-                    period
-                );
-
-                _containers.Add(container);
-            }
-
-            return container;
         }
 
-        private LimitConsumptionContainer FindOrCreatePerPolicyContainerForService(CaseServiceCostSplit caseService,
+        private LimitConsumptionContainer FindPerPolicyContainerForService(CaseServiceCostSplit caseService,
             Period period)
         {
-            var container = _containers
-                .OfType<SharedConsumptionContainerForService>()
+            return _containers.OfType<SharedConsumptionContainerForService>()
                 .FirstOrDefault(cs =>
                     cs.PolicyId == caseService.PolicyId
                     && cs.ServiceCode == caseService.ServiceCode
                     && cs.Period.From.Date == period.From.Date
                     && cs.Period.To.Date == period.To.Date);
-
-            if (container == null)
-            {
-                container = new SharedConsumptionContainerForService
-                (
-                    caseService.PolicyId,
-                    caseService.ServiceCode,
-                    period
-                );
-
-                _containers.Add(container);
-            }
-
-            return container;
         }
 
-        private LimitConsumptionContainer FindOrCreatePerCaseConsumptionContainerForService(CaseServiceCostSplit caseService)
+        private LimitConsumptionContainer FindPerCaseConsumptionContainerForService(CaseServiceCostSplit caseService)
         {
-            var container = _containers
-                .OfType<CaseConsumptionContainerForService>()
+            return _containers.OfType<CaseConsumptionContainerForService>()
                 .FirstOrDefault(cs =>
                     cs.PolicyId == caseService.PolicyId
                     && cs.ServiceCode == caseService.ServiceCode
                     && cs.CaseNumber == caseService.CaseNumber);
-
-            if (container == null)
-            {
-                container = new CaseConsumptionContainerForService
-                (
-                    caseService.PolicyId,
-                    caseService.ServiceCode,
-                    caseService.CaseNumber
-                );
-
-                _containers.Add(container);
-            }
-
-            return container;
         }
 
         public void Add(LimitConsumptionContainer container)

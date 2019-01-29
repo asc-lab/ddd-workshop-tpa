@@ -21,96 +21,54 @@ namespace TpaOk.DataAccess
         {
             if (limit.LimitPeriod is PerCaseLimitPeriod)
             {
-                return FindOrCreatePerCaseConsumptionContainerForService(caseService);
+                return FindPerCaseConsumptionContainerForService(caseService);
             }
             else if (limit.Shared)
             {
-                return FindOrCreatePerPolicyContainerForService(caseService, period);
+                return FindPerPolicyContainerForService(caseService, period);
             }
             else
             {
-                return FindOrCreatePerInsuredContainerForService(caseService, period);
+                return FindPerInsuredContainerForService(caseService, period);
             }
         }
+
 
         public void Add(LimitConsumptionContainer container)
         {
             _dbContext.LimitConsumptionContainers.Add(container);
         }
 
-        private LimitConsumptionContainer FindOrCreatePerInsuredContainerForService(CaseServiceCostSplit caseService,
+        private LimitConsumptionContainer FindPerInsuredContainerForService(CaseServiceCostSplit caseService,
             Period period)
         {
-            var container = _dbContext.IndividualInsuredLimitConsumptionContainers
+            return _dbContext.LimitConsumptionContainers.OfType<IndividualInsuredConsumptionContainerForService>()
                 .FirstOrDefault(cs =>
                     cs.PolicyId == caseService.PolicyId
                     && cs.ServiceCode == caseService.ServiceCode
                     && cs.InsuredId == caseService.InsuredId
                     && cs.Period.From.Date == period.From.Date
                     && cs.Period.To.Date == period.To.Date);
-
-            if (container == null)
-            {
-                container = new IndividualInsuredConsumptionContainerForService
-                (
-                    caseService.PolicyId,
-                    caseService.ServiceCode,
-                    caseService.InsuredId,
-                    period
-                );
-
-                _dbContext.IndividualInsuredLimitConsumptionContainers.Add(container);
-            }
-
-            return container;
         }
 
-        private LimitConsumptionContainer FindOrCreatePerPolicyContainerForService(CaseServiceCostSplit caseService,
+        private LimitConsumptionContainer FindPerPolicyContainerForService(CaseServiceCostSplit caseService,
             Period period)
         {
-            var container = _dbContext.SharedLimitConsumptionContainers
+            return _dbContext.LimitConsumptionContainers.OfType<SharedConsumptionContainerForService>()
                 .FirstOrDefault(cs =>
                     cs.PolicyId == caseService.PolicyId
                     && cs.ServiceCode == caseService.ServiceCode
                     && cs.Period.From.Date == period.From.Date
                     && cs.Period.To.Date == period.To.Date);
-
-            if (container == null)
-            {
-                container = new SharedConsumptionContainerForService
-                (
-                    caseService.PolicyId,
-                    caseService.ServiceCode,
-                    period
-                );
-
-                _dbContext.SharedLimitConsumptionContainers.Add(container);
-            }
-
-            return container;
         }
 
-        private LimitConsumptionContainer FindOrCreatePerCaseConsumptionContainerForService(CaseServiceCostSplit caseService)
+        private LimitConsumptionContainer FindPerCaseConsumptionContainerForService(CaseServiceCostSplit caseService)
         {
-            var container = _dbContext.CaseConsumptionContainers
+            return _dbContext.LimitConsumptionContainers.OfType<CaseConsumptionContainerForService>()
                 .FirstOrDefault(cs =>
                     cs.PolicyId == caseService.PolicyId
                     && cs.ServiceCode == caseService.ServiceCode
                     && cs.CaseNumber == caseService.CaseNumber);
-
-            if (container == null)
-            {
-                container = new CaseConsumptionContainerForService
-                (
-                    caseService.PolicyId,
-                    caseService.ServiceCode,
-                    caseService.CaseNumber
-                );
-
-                _dbContext.CaseConsumptionContainers.Add(container);
-            }
-
-            return container;
         }
 
 
