@@ -27,6 +27,23 @@ namespace TpaOk.Domain.Limits
                 return LimitsApplicationResult.NoApplied();
             }
 
+            var limitConsumptionContainer = FindOrCreateMatchingConsumptionContainer(caseService, limit);
+
+
+            var limitCalculation = limit.Calculate
+            (
+                caseService, 
+                limitConsumptionContainer.CurrentConsumption()
+            );
+            
+            limitConsumptionContainer.ReserveLimitsFor(caseService, limitCalculation.LimitConsumption, 0);
+            
+            return LimitsApplicationResult.Applied(limitCalculation);
+        }
+
+        private LimitConsumptionContainer FindOrCreateMatchingConsumptionContainer(CaseServiceCostSplit caseService,
+            Limit limit)
+        {
             var consumptionPeriod = limit.CalculatePeriod(caseService.Date, _policyVersion);
             var limitConsumptionContainer = _limitConsumptionContainers.GetLimitConsumptionContainer
             (
@@ -41,17 +58,8 @@ namespace TpaOk.Domain.Limits
                     new LimitConsumptionContainerFactory().Create(caseService, limit, consumptionPeriod);
                 _limitConsumptionContainers.Add(limitConsumptionContainer);
             }
-            
-            
-            var limitCalculation = limit.Calculate
-            (
-                caseService, 
-                limitConsumptionContainer.CurrentConsumption()
-            );
-            
-            limitConsumptionContainer.ReserveLimitsFor(caseService, limitCalculation.LimitConsumption, 0);
-            
-            return LimitsApplicationResult.Applied(limitCalculation);
+
+            return limitConsumptionContainer;
         }
     }
 

@@ -20,21 +20,21 @@ namespace TpaOk.Domain.Limits
 
         private LimitConsumptionContainer CreatePerInsuredContainerForService(CaseServiceCostSplit caseService, Period period)
         {
-            return new SharedConsumptionContainerForService
+            return new IndividualInsuredConsumptionContainerForService
             (
                 caseService.PolicyId,
                 caseService.ServiceCode,
+                caseService.InsuredId,
                 period
             );
         }
 
         private LimitConsumptionContainer CreatePerPolicyContainerForService(CaseServiceCostSplit caseService, Period period)
         {
-            return new IndividualInsuredConsumptionContainerForService
+            return new SharedConsumptionContainerForService
             (
                 caseService.PolicyId,
                 caseService.ServiceCode,
-                caseService.InsuredId,
                 period
             );
         }

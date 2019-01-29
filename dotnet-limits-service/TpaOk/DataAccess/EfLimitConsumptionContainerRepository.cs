@@ -19,6 +19,8 @@ namespace TpaOk.DataAccess
         public LimitConsumptionContainer GetLimitConsumptionContainer(CaseServiceCostSplit caseService, Limit limit,
             Period period)
         {
+            var all = _dbContext.LimitConsumptionContainers.ToList();
+            
             if (limit.LimitPeriod is PerCaseLimitPeriod)
             {
                 return FindPerCaseConsumptionContainerForService(caseService);
